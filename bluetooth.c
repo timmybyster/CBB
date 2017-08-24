@@ -189,6 +189,7 @@ void processBTPacket(void){
             btPacket.send.size += 2;
             btPacket.send.data[0] = btPacket.receive.data[0];
             btPacket.send.data[1] = (*tempDetInfo)&0xF0;
+            state.led.next = solidBlue;
             break;
             
         case CMD_BT_BOOT:
