@@ -94,7 +94,7 @@ void tagForInterrupt(void){
 //adds a new tag to memory after a successful read but only if it is not stored
 //in memory currently
 void addNewTag(void){
-    if(checkForExistingUID(TAG_Response + 2) || ABB_1.dets_length >= 10)        //check the read UID from the tag against existing UIDs in memory
+    if(checkForExistingUID(TAG_Response + 2) || ABB_1.dets_length >= 20)        //check the read UID from the tag against existing UIDs in memory
         return;                                                                 //if it exists do not add it
     
     ABB_1.dets_length++;                                                        //otherwise increment the number of EDDs stored
