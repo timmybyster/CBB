@@ -208,10 +208,6 @@ void device(void){
             break;
             
         case bluetoothOffDevice :
-            sleepBluetooth();                                                   //turn off the Bluetooth
-            FLAGS.bluetoothTimer = 0;                                           //clear the 10 minute timeout Flag    
-            COUNTERS.bluetoothTimer = mins1;                                    //reload the 10 minute Counter
-            FLAGS.bluetooth = 0;
             break;
             
         case programDevice :
