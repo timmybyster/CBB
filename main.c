@@ -184,6 +184,8 @@ void device(void){
             COUNTERS.sec3 = secs3;
             FLAGS.sec1 = 0;                                                     //Clear the 2 second Flag
             COUNTERS.sec1 = secs1;                                              //reload the 2 second counter
+            FLAGS.min10 = 0;
+            COUNTERS.min10 = 0;
             break;
             
         case detErrorDevice :
@@ -195,6 +197,8 @@ void device(void){
             COUNTERS.sec3 = 0;
             FLAGS.sec1 = 0;                                                     //Clear the 2 second Flag
             COUNTERS.sec1 = secs1;                                              //reload the 2 second counter
+            FLAGS.min10 = 0;
+            COUNTERS.min10 = 0;
             break;
             
         case bluetoothDevice :
