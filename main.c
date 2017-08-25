@@ -108,8 +108,7 @@ void main(void) {
     COUNTERS.min10 = mins10;
     COUNTERS.missingPulses = 0;
     ABB_1.destination = 0xFFFF;    
-    initialise();                                                              //initialise the device
-    testMemory();
+    initialise();                                                               //initialise the device
     while(1){                                                                   //loop forever
         device();                                                               //execute based on the current State
         deviceStateHandler();                                                   //determine the next device State
