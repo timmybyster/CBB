@@ -49,13 +49,13 @@ void fire(void){
     CLRWDT();
     FLAGS.fireComplete = 0;
     fireUIDs();
-    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 150){
+    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses <= 120){
         missingPulseCheck = COUNTERS.missingPulses;
         _delay_ms(1000);
         CLRWDT();
     }
     WDTCON0bits.SEN = 0;
-    if(COUNTERS.missingPulses >= 150){
+    if(COUNTERS.missingPulses >= 120){
         EDD_Energy_Store();
         EDD_Blast();
         _delay_ms(10000);
