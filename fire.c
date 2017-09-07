@@ -103,7 +103,6 @@ void checkForUnfiredEdds(void){
             }
             else{
                 ABB_1.det_arrays.info[i].data.fired = 0;
-                FLAGS.fireSuccessFlag = 0;
             }
         }
     }   
