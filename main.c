@@ -133,6 +133,7 @@ void device(void){
             checkStatusBits();                                                   //check to see if anything has changed  
             currentStateHandler();                                               //execute any background processes
             disengageRelay();
+            FLAGS.shaftComplete = 0;
             break;
 
         case idleDevice :
