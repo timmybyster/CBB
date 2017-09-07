@@ -138,29 +138,21 @@ void firePic(void){
     _delay_ms(3000);                                                            //delay for 3 seconds to wait for missing pulses after blast command                                                     //prepare timers,interrupts and supplies for programming
     programInitialise();                                                        //initialise the pins, ADC and variables
     fireUIDs();                                                                 //program the UIDs for firing
-    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 100){//while missing pulses are still occurring and there have been less than 75
+    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 160){//while missing pulses are still occurring and there have been less than 75
         missingPulseCheck = COUNTERS.missingPulses;                             //assign the current number of missing pulses to the comparison variable
         _delay_ms(1000);                                                        //wait 1 second so that at least 1 missing pulse should occur in this time
     }
     
-    if(COUNTERS.missingPulses >= 100){                                           //if at least 75 missing pulses have occurred there is intent to fir
+    if(COUNTERS.missingPulses >= 100){                                          //if at least 75 missing pulses have occurred there is intent to fir
         EDD_Energy_Store();                                                     //so charge the EDDs
-        triStateTxIsHigh();                                                     //give control of the line to firing PIC
-        _delay_ms(30000);                                                       //give the firing pic time to fire
+        Set_Line_High();                                                        //90 Secs
+        _delay_ms(5000);                                                        
+        Set_Line_Low();                                                         //95 Secs
+        _delay_ms(20000);                                                       //give the firing pic time to fire
     }
-    else{
+    else{                                                                       //115 Secs
         FLAGS.fireSuccessFlag = 0;                                              //there were not enough missing pulses so firing was unsuccessful
     }   
-//    if(COUNTERS.missingPulses >= 75){                                           //if at least 75 missing pulses have occurred there is intent to fire
-//        EDD_Energy_Store();                                                     //so charge the EDDs
-//        _delay_ms();                                                       //give the firing pic time to fire
-//        triStateTxIsHigh();                                                     //give control of the line to firing PIC
-//        _delay_ms(20000);                                                       //give the firing pic time to fire
-//    }
-//    else{
-//        FLAGS.fireSuccessFlag = 0;                                              //there were not enough missing pulses so firing was unsuccessful
-//    }
-    controlTxIsHigh();                                                          //take control of the line
     EDD_Discharge();                                                            //discharge the EDDs for safety in case the firing signal was not sent by the other command
     checkForUnfiredEdds();                                                      //check the line for any EDDs that did not fire
     addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the resulting data from the routine to queue to be sent to the surface
