@@ -49,7 +49,7 @@ void fire(void){
     CLRWDT();
     FLAGS.fireComplete = 0;
     fireUIDs();
-    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 20){
+    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 160){
         missingPulseCheck = COUNTERS.missingPulses;
         _delay_ms(1000);
         CLRWDT();
