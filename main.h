@@ -78,8 +78,6 @@
 //============================================================================//
 #define _XTAL_FREQ      16000000
 
-#define AB1_SERIAL      0x0008
-
 //PIN_DEFINITIONS
 #define TRIS_24VCntrl   TRISFbits.TRISF3
 #define LAT_24VCntrl    LATFbits.LATF3
@@ -228,6 +226,7 @@ typedef union{
 
 typedef union{
        struct{
+            unsigned short serial;
             unsigned char dets_length;
             ABB_data info;
             detonator_array det_arrays;

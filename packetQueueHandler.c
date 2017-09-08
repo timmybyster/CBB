@@ -113,12 +113,12 @@ void handleIncomingQueuePacket(){
             break;
             
         case CMD_AB1_DATA :
-            if(incomingQueue.queue_store[index].destination == AB1_SERIAL)
+            if(incomingQueue.queue_store[index].destination == ABB_1.serial)
                 FLAGS.acknowledgeCCB = 0;
             break;
             
         case CMD_AB1_UID :
-            if(incomingQueue.queue_store[index].destination == AB1_SERIAL)
+            if(incomingQueue.queue_store[index].destination == ABB_1.serial)
                 FLAGS.acknowledgeCCB = 0;
             break;
             

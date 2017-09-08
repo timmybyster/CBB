@@ -219,7 +219,7 @@ void setSlaveMode(void){
 void setDeviceName(void){
     unsigned char txreg[] = "AT+NAMECBB SN: 0000\r\n";                          //initialise the the command to be sent to the module
     
-    unsigned short tempSerial = AB1_SERIAL;                                     //assign the serial number of the device to a temporary variable
+    unsigned short tempSerial = ABB_1.serial;                                     //assign the serial number of the device to a temporary variable
     txreg[15] = tempSerial/1000 + 48;                                           //determine the serial number as 4 digit decimal value
 	tempSerial -= (txreg[15] - 48)*1000;                                        //remove the 4th tens digit
 	txreg[16] = tempSerial/100 + 48;                                            //determine the 3rd decimal digit
@@ -442,7 +442,7 @@ void receiveBluetoothSetup(void){
     dataR[index] = uartReceiveByte;                                             //store the data in an array
     if(uartReceiveByte == '\n'){                                                //until the line end character has been received
         bluetoothStatus.dataReceived = 1;                                       //if it's the end of the line show that data has been received
-        if(setupIndex == 3){                                                    //if the setup index is 1 then all commands responses have been received
+        if(setupIndex >= 3){                                                    //if the setup index is 1 then all commands responses have been received
             bluetoothStatus.bluetoothSetup = 0;                                 //conclude the setup
             state.led.next = solidBlue;                                         //Ensure the LED goes solid blue to indicate that bluetooth has been activated
         }

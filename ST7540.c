@@ -222,8 +222,8 @@ void buildMessageST7540(void){
     bufferTXST7540UCA[2] = ST7540_HEADER >> 8;                                  //Packet header
     bufferTXST7540UCA[3] = ST7540_HEADER;
     bufferTXST7540UCA[4] = ST7540_MIN_PACKET_LEN + outgoingQueue.queue_store[index].data_length;//Packet length
-    bufferTXST7540UCA[5] = AB1_SERIAL >> 8;                                     //Packet source
-    bufferTXST7540UCA[6] = AB1_SERIAL;
+    bufferTXST7540UCA[5] = ABB_1.serial >> 8;                                     //Packet source
+    bufferTXST7540UCA[6] = ABB_1.serial;
     bufferTXST7540UCA[7] = outgoingQueue.queue_store[index].destination >> 8;   //Packet destination
     bufferTXST7540UCA[8] = outgoingQueue.queue_store[index].destination;
     bufferTXST7540UCA[9] = packetNumberUC++;                                    //Packet number

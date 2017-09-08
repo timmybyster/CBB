@@ -203,6 +203,7 @@ void initialiseWatchDogTimer(void){
 }
 
 void initialiseDetMemory(void){
+    readStructureFromEeprom(&ABB_1.serial, 2);
     readStructureFromEeprom(&ABB_1.dets_length,1);
     if(ABB_1.dets_length == 0xFF)
         ABB_1.dets_length = 0;
