@@ -100,7 +100,7 @@ void initialiseTimer4(void){
     INTCONbits.GIEH = 1;                                                        //Enable all unmasked interrupts
     PIR5bits.TMR4IF = 0;                                                        //Clear interrupt flag
     IPR5bits.TMR4IP = 1;                                                        //Timer4 interrupt = high priority
-    PR4 = 240;                                                                  //Register to match Timer2 value to
+    PR4 = 199;                                                                  //Register to match Timer2 value to
 }
 
 void initialiseTimer6(void){

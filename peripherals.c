@@ -102,13 +102,6 @@ void Delay_ms(int ms)
 
 //500us delay for EDD comms
 void Delay_500us(void){
-    PR4=230;
-    while (!FLAGS.us500);                                                       //wait for the 500us flag
-    FLAGS.us500 = 0;                                                            //clear the flag
-}
-
-void Delay_500us_X(void){
-    PR4=169;
     while (!FLAGS.us500);                                                       //wait for the 500us flag
     FLAGS.us500 = 0;                                                            //clear the flag
 }

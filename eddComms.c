@@ -27,7 +27,6 @@ unsigned char programUID(unsigned char window);
 
 extern void Delay_ms(int ms);
 extern void Delay_500us(void);
-extern void Delay_500us_X(void);
 extern void Delay_100us(void);
 extern unsigned char checkForExistingUID(unsigned long *receivedUID);
 
@@ -117,7 +116,7 @@ void Set_Line_Low(void){
 //transmits a Manchester encoded 1
 void Tx_1(void){
     tx = 1;                                                                     //first set the line high
-    Delay_500us_X();                                                              //wait 500us
+    Delay_500us();                                                              //wait 500us
     tx = 0;                                                                     //then set the line low
     Delay_500us();                                                              //wait 500us for proceeding to next bit
 }
@@ -125,7 +124,7 @@ void Tx_1(void){
 //transmits a Manchester encoded 0
 void Tx_0(void){
     tx = 0;                                                                     //first set the line low                                              
-    Delay_500us_X();                                                              //wait 500us
+    Delay_500us();                                                              //wait 500us
     tx = 1;                                                                     //then set the line high
     Delay_500us();                                                              //wait 500us before proceeding to the next bit
 }
