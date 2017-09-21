@@ -96,12 +96,12 @@ void returnFromProgramming(void){
     modemReceiveInterrupt = 1;                                                  //enable message reception From the surface
     Set_Line_Low();                                                             //Clear the Line
     LAT_CableTest_Enable = 1;                                                   //Enable cable testing
-    LAT_24VCntrl = 0;                                                           //turn off the 24V supply
+    LAT_24VCntrl = 0;                                                           //turn off the 24V supply 
+    _delay_ms(1000);
     CLRWDT();
 }
 
 void programUIDs(void){
-    WDTCON0bits.SEN = 0;
     maxProgramAttempts = 5;
     if(!checkLineForConnectedUIDs()){                                           //check to see if there is anything connected to the blast terminals
         if(ABB_1.dets_length > 0)                                               //if there isn't and there should be 
