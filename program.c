@@ -36,6 +36,7 @@ extern void addPacketToOutgoingQueue(char *data, unsigned char command, unsigned
 
 extern void initialiseStates(void);
 extern void clearEDDStatusbits(void);
+extern void sleepBluetooth(void);
 
 
 void program(void){
@@ -58,9 +59,11 @@ void programInitialise(void){
     clearEDDStatusbits();
     EDD_Init_Comms();                                                           //initialise pins and ADC for programming
     FLAGS.progSuccess = 1;                                                      //assume that programming will be successful and only
+    FLAGS.programCableFault = 0;
 }                                                                               //clear the flag if we confirm that it is not
 
 void prepareForProgramming(void){
+    sleepBluetooth();
     sec4Interrupt = 0;                                                          //disable the sleep interrupt
     sec4Enable = 0;                                                             //disable the sleep timer                                                   //turn on the 100us Delay Timer
     msInterrupt = 0;                                                            //Disable the State Handler 
