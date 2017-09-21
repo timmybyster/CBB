@@ -136,13 +136,15 @@ void firePic(void){
     setRedLed();                                                                //set the red LED to indicate firing
     prepareForProgramming();
     _delay_ms(3000);                                                            //delay for 3 seconds to wait for missing pulses after blast command                                                     //prepare timers,interrupts and supplies for programming
+    CLRWDT();
     programInitialise();                                                        //initialise the pins, ADC and variables
     fireUIDs();                                                                 //program the UIDs for firing
     while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 160){//while missing pulses are still occurring and there have been less than 75
         missingPulseCheck = COUNTERS.missingPulses;                             //assign the current number of missing pulses to the comparison variable
         _delay_ms(1000);                                                        //wait 1 second so that at least 1 missing pulse should occur in this time
+        CLRWDT();
     }
-    
+    WDTCON0bits.SEN = 0;
     if(COUNTERS.missingPulses >= 100){                                          //if at least 75 missing pulses have occurred there is intent to fir
         EDD_Energy_Store();                                                     //so charge the EDDs
         Set_Line_High();                                                        //90 Secs
@@ -152,11 +154,15 @@ void firePic(void){
     }
     else{                                                                       //115 Secs
         FLAGS.fireSuccessFlag = 0;                                              //there were not enough missing pulses so firing was unsuccessful
-    }   
-    EDD_Discharge();                                                            //discharge the EDDs for safety in case the firing signal was not sent by the other command
-    checkForUnfiredEdds();                                                      //check the line for any EDDs that did not fire
-    addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the resulting data from the routine to queue to be sent to the surface
-    initialiseStates();                                                         //re-initialise the states when returning from programming
-    returnFromProgramming();                                                    //prepare interrupts, timers, and supplies for normal operation
-    FLAGS.fireComplete = 1;                                                     //show that firing is complete
+    }
+    CLRWDT();
+    WDTCON0bits.SEN = 1;
+    checkForUnfiredEdds();
+    LAT_24VCntrl = 0;
+    addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));
+    initialiseStates();
+    FLAGS.fireComplete = 1;
+    COUNTERS.missingPulses = 0;
+    FLAGS.fireFlag = 0;
+    returnFromProgramming();
 }

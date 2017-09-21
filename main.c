@@ -219,7 +219,7 @@ void device(void){
             break;
 
         case fireDevice :                                                       //call the Fire Routine
-            fire();                                                             //Clear the Fire Flag
+            firePic();                                                             //Clear the Fire Flag
             FLAGS.fireFlag = 0;
             break;
             
