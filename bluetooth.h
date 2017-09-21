@@ -25,8 +25,8 @@
 #define     ANSEL_BT_RST           ANSELGbits.ANSELG0
 #define     LAT_BT_RST             LATGbits.LATG0
 
-#define     TRIS_BT_ENABLE         TRISDbits.TRISD3
-#define     LAT_BT_ENABLE          LATDbits.LATD3
+#define     TRIS_BT_ENABLE         TRISGbits.TRISG1
+#define     LAT_BT_ENABLE          LATGbits.LATG1
 
 #define     uartEnable             RC3STAbits.SPEN
 #define     uartRecieveEnable      RC3STAbits.CREN

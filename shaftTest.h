@@ -17,10 +17,10 @@
 //END OF SHAFT TEST INTERVALS
 
 //SHAFT TEST PINS
-#define ANSEL_Relay_Drive      ANSELAbits.ANSELA1
-#define TRIS_Relay_Drive       TRISAbits.TRISA1
-#define LAT_Relay_Drive        LATAbits.LATA1
-#define PORT_Relay_Drive       PORTAbits.RA1
+#define ANSEL_Relay_Drive      ANSELBbits.ANSELB0
+#define TRIS_Relay_Drive       TRISBbits.TRISB0
+#define LAT_Relay_Drive        LATBbits.LATB0
+#define PORT_Relay_Drive       PORTBbits.RB0
 
 #define ANSEL_EL_Enable        ANSELGbits.ANSELG2
 #define TRIS_EL_Enable         TRISGbits.TRISG2
@@ -36,15 +36,15 @@
 #define LAT_CableTestRead      LATGbits.LATG3
 #define PORT_CableTestRead     PORTGbits.RG3
 
-#define ANSEL_EarthLeakage     ANSELGbits.ANSELG7
-#define TRIS_EarthLeakage      TRISGbits.TRISG7
-#define LAT_EarthLeakage       LATGbits.LATG7
-#define PORT_EarthLeakage      PORTGbits.RG7
+#define ANSEL_EarthLeakage     ANSELBbits.ANSELB2
+#define TRIS_EarthLeakage      TRISBbits.TRISB2
+#define LAT_EarthLeakage       LATBbits.LATB2
+#define PORT_EarthLeakage      PORTBbits.RB2
 //END OF SHAFT TEST PINS
 
 //SHAFT TEST ADC CONFIG
 #define CHANNEL_CableTestRead  0b00110011
-#define CHANNEL_EarthLeakage   0b00101001
+#define CHANNEL_EarthLeakage   0b00001010
 #define ADCDelay               20
 #define testRepetitions        5  
 //SHAFT TEST ADC CONFIG

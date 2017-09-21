@@ -83,17 +83,17 @@
 #define LAT_24VCntrl    LATFbits.LATF3
 #define ANSEL_24VCntrl  ANSELFbits.ANSELF3
 
-#define TRIS_12VCntrl   TRISGbits.TRISG1
-#define LAT_12VCntrl    LATGbits.LATG1
-#define ANSEL_12VCntrl  ANSELGbits.ANSELG1
-#define PORT_12VCntrl   PORTGbits.RG1
+#define TRIS_12VCntrl   TRISFbits.TRISF0
+#define LAT_12VCntrl    LATFbits.LATF0
+#define ANSEL_12VCntrl  ANSELFbits.ANSELF0
+#define PORT_12VCntrl   PORTFbits.RF0
 
 #define LAT_CableTest_Enable            LATEbits.LATE5
 
-#define ANSEL_ACor36V           ANSELBbits.ANSELB2
-#define TRIS_ACor36V            TRISBbits.TRISB2
-#define LAT_ACor36V             LATBBits.LATB2
-#define PORT_ACor36V            PORTBbits.RB2
+#define ANSEL_ACor36V           ANSELBbits.ANSELB1
+#define TRIS_ACor36V            TRISBbits.TRISB1
+#define LAT_ACor36V             LATBbits.LATB1
+#define PORT_ACor36V            PORTBbits.RB1
 
 #define ANSEL_FireSignal_Read   ANSELEbits.ANSELE4
 #define TRIS_FireSignal_Read    TRISEbits.TRISE4
@@ -129,9 +129,9 @@
 //END OF TIMER DEFINITIONS
 
 //INTERRUPT DEFINITIONS
-#define acOr36VInterrupt                PIE0bits.INT2IE
-#define acOr36VInterruptFlag            PIR0bits.INT2IF
-#define acOr36VInterruptEdge            INTCONbits.INT2EDG
+#define acOr36VInterrupt                PIE0bits.INT1IE
+#define acOr36VInterruptFlag            PIR0bits.INT1IF
+#define acOr36VInterruptEdge            INTCONbits.INT1EDG
 
 #define sspiInterrupt                   PIE3bits.SSP1IE
 #define sspiInterruptFlag               PIR3bits.SSP1IF
