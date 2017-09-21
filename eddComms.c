@@ -192,6 +192,8 @@ unsigned char rxWordEDD(void){
 //Received words are stored in response in order of reception
 unsigned char commandResponse(unsigned char TxLength, unsigned char RxLength, unsigned char *data){
     Delay_ms(50);                                                               //wait 50ms before transmitting
+    if(previousADC > 0x316)
+        FLAGS.programCableFault = 1;
     for(int i = 0; i < TxLength; i++){                                          //for each word
         Tx_Word(*(data + i));                                                   //transmit the word
     }

@@ -126,6 +126,12 @@ void programUIDs(void){
             else                                                                //if programming was successful
                 ABB_1.det_arrays.info[i].data.connection_status = 1;            //indicate that the EDD is connected
             CLRWDT();
+            if(FLAGS.programCableFault){
+                FLAGS.progSuccess = 0;
+                FLAGS.progComplete = 1;
+                return;
+            }
+                
         }
     }
     _delay_ms(1000);
@@ -149,6 +155,11 @@ void programUIDs(void){
                 if(attempts >= 2)
                     //FLAGS.progSuccess = 0;                                    //Clear the program success Flag
                     NOP();
+            }
+            if(FLAGS.programCableFault){
+                FLAGS.progSuccess = 0;
+                FLAGS.progComplete = 1;
+                return;
             }
             CLRWDT();
         }

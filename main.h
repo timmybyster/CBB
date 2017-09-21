@@ -317,6 +317,7 @@ typedef union {
                unsigned bluetooth               :1;
                unsigned bluetoothTimer          :1;
                unsigned acknowledgeCCB          :1;
+               unsigned programCableFault       :1;
         };
 }FLAGS_t;
 
