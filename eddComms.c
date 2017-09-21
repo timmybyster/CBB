@@ -16,6 +16,7 @@ void Tx_Start_Bit(void);
 unsigned char detectRisingEdgeEDD(unsigned char change);
 unsigned char detectFallingEdgeEDD(unsigned char change);
 void Tx_Calibration_Pulses(void);
+void Tx_Calibration_Pulses_90(void);
 void initialiseEddADC(void);
 
 unsigned short readEddADC(void);
@@ -365,6 +366,8 @@ void EDD_Calibrate(void){
     unsigned char EDD_calibration_command;                      
     EDD_calibration_command = EDD_CALIBRATE_COMMAND;                            //prepare the instruction
     
+    //Tx_Calibration_Pulses_90();
+    
     Tx_Word(EDD_calibration_command);                                           //transmit the command
     Delay_ms(WORD_DELAY);                                                       //delay 13ms
     
@@ -382,6 +385,21 @@ void Tx_Calibration_Pulses(void)
         }     
         Set_Line_High();                                                        //set the line high
         for (int j = 0; j < PULSE_DUTY; j++){                                   //for the duty cycle
+            Delay_100us();                                                      //keep the line high for 100us
+        }
+        CLRWDT();
+    }
+}
+
+void Tx_Calibration_Pulses_90(void)
+{
+    for (int i = 0; i < CALIBRATION_PULSES; i++){                               //loop for the number of calibration pulses
+        Set_Line_Low();                                                         //set the line low
+        for (int j = 0; j < 10 - 9; j++){                                       //for 10 - the pulse duty
+            Delay_100us();                                                      //keep the line low for 100us
+        }     
+        Set_Line_High();                                                        //set the line high
+        for (int j = 0; j < 9; j++){                                            //for the duty cycle
             Delay_100us();                                                      //keep the line high for 100us
         }
         CLRWDT();
