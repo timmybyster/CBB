@@ -191,7 +191,7 @@ typedef union{
 
 typedef union {
         struct{
-               unsigned B7                          :1;
+               unsigned logged                      :1;
                unsigned connection_status           :1;
                unsigned tagged                      :1;
                unsigned fired                       :1;

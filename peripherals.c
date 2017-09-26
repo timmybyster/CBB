@@ -190,6 +190,15 @@ unsigned char checkForExistingUID(unsigned long *receivedUID){
     return 0;                                                                   //otherwise return fail
 }
 
+unsigned char getTaggedUids(void){
+    unsigned char count = 0;
+    for(int i = 1; i < ABB_1.dets_length; i ++){                                //for every EDD
+        if(ABB_1.det_arrays.info[i].data.tagged)
+            count++;
+    }
+    return count;
+}
+
 void writeByteToEeprom(unsigned char *byte){
     unsigned int address = byte - &ABB_1;
     if(address >= 240)
@@ -468,7 +477,7 @@ void testMemory(void){
 }
 
 void clearEDDStatusbits(void){
-    for(int i = 0; i < 101; i++){                                               //clear the entire UID memory bank
+    for(int i = 0; i < maxDets; i++){                                           //clear the entire UID memory bank
             ABB_1.det_arrays.info[i].data.connection_status = 0;
             ABB_1.det_arrays.info[i].data.calibration_status = 0;
             ABB_1.det_arrays.info[i].data.energy_storing = 0;

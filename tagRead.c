@@ -44,6 +44,7 @@ extern void ppsLock(void);
 
 extern void addPacketToOutgoingQueue(char *data, unsigned char command, unsigned char length, unsigned short destination);
 extern unsigned char checkForExistingUID(unsigned long *receivedUID);
+unsigned char getTaggedUids(void);
 
 extern void setBlueLed(void);
 extern void initialiseStates(void);
@@ -94,15 +95,22 @@ void tagForInterrupt(void){
 //adds a new tag to memory after a successful read but only if it is not stored
 //in memory currently
 void addNewTag(void){
-    if(checkForExistingUID(TAG_Response + 2) || ABB_1.dets_length >= 10)        //check the read UID from the tag against existing UIDs in memory
+    if(checkForExistingUID(TAG_Response + 2)){
+        state.led.next = tagGreen;                                              //show that the tag was successful
         return;                                                                 //if it exists do not add it
-    
+    }
+    if(ABB_1.dets_length >= 100 || getTaggedUids() >= 10){//check the read UID from the tag against existing UIDs in memory
+        state.led.next = tagRed;                                                //show that the tag was successful
+        return;                                                                 //if it exists do not add it
+    }
+    state.led.next = tagGreen;                                                  //show that the tag was successful
     ABB_1.dets_length++;                                                        //otherwise increment the number of EDDs stored
     ABB_1.det_arrays.info[ABB_1.dets_length].delay = STANDARD_EDD_DELAY;        //assign it with the standard delay
     for (int i = 0; i < 4; i ++){                                               //for each index of the UID
         ABB_1.det_arrays.UIDs[ABB_1.dets_length].UID[i] = TAG_Response[i + 2];  //store it in memory
     }
     ABB_1.det_arrays.info[ABB_1.dets_length].data.tagged = 1;                   //show that the EDD was tagged in memory
+    ABB_1.det_arrays.info[ABB_1.dets_length].data.logged = 0;                   //show that the EDD was not logged in memory
     addPacketToOutgoingQueue(&ABB_1.det_arrays.UIDs[ABB_1.dets_length], CMD_AB1_UID, sizeof(detonator_UID), ABB_1.destination);//send the UID to the surface
     addPacketToOutgoingQueue(&ABB_1.det_arrays.info[ABB_1.dets_length], CMD_AB1_DATA, sizeof(detonator_data), ABB_1.destination);//send the EDD data to the surface
 }
@@ -607,7 +615,6 @@ void readTagRoutine(void){
     if(attempts < tagAttempts){                                                 //if there was a successful tag
         addNewTag();                                                            //add it to memory
         tagForInterrupt();                                                      //prepare the pins for another tag
-        state.led.next = tagGreen;                                              //show that the tag was successful
         return;                                                                 //leave the routine
     }
     attempts = 0;                                                               //reset the number of attempts
@@ -617,7 +624,6 @@ void readTagRoutine(void){
     if(attempts < tagAttempts){                                                 //if there was a successful tag
         addNewTag();                                                            //add it to memory
         tagForInterrupt();                                                      //prepare the pins for another tag
-        state.led.next = tagGreen;                                              //show that the tag was successful
         return;                                                                 //leave the routine
     }
     tagForInterrupt();                                                          //prepare the pins for another tag

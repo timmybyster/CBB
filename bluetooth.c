@@ -167,7 +167,8 @@ void processBTPacket(void){
             }
             ABB_1.det_arrays.info[ABB_1.dets_length].delay = (unsigned short)btPacket.receive.data[4] << 8;//assign the first byte of the delay to memory
             ABB_1.det_arrays.info[ABB_1.dets_length].delay |= (unsigned short)btPacket.receive.data[5];//assign the second byte of the delay to memory
-            ABB_1.det_arrays.info[ABB_1.dets_length].data.tagged = 1;           //show that this EDD has been tagged
+            ABB_1.det_arrays.info[ABB_1.dets_length].data.logged = 1;           //show that this EDD has been logged
+            ABB_1.det_arrays.info[ABB_1.dets_length].data.tagged = 0;           //show that this EDD has not been tagged
             for(int i = 0; i < 4; i++){
                 btPacket.send.data[i] = btPacket.receive.data[i];               //build the response
             }
