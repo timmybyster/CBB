@@ -366,8 +366,10 @@ void EDD_Calibrate(void){
     unsigned char EDD_calibration_command;                      
     EDD_calibration_command = EDD_CALIBRATE_COMMAND;                            //prepare the instruction
     
-    //Tx_Calibration_Pulses_90();
-    
+    Tx_Calibration_Pulses_90();
+    Delay_ms(WORD_DELAY); 
+    Delay_ms(WORD_DELAY);
+    Delay_ms(WORD_DELAY); 
     Tx_Word(EDD_calibration_command);                                           //transmit the command
     Delay_ms(WORD_DELAY);                                                       //delay 13ms
     
