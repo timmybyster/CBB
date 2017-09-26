@@ -35,6 +35,7 @@ extern void initialiseTimer1(void);
 extern void programInitialise(void);
 extern void addDataToOutgoingQueue (unsigned char *data, unsigned char command, int size );
 extern void initialiseStates(void);
+extern void disengageRelay(void);
 
 void fire(void){
     unsigned char missingPulseCheck = 0;
@@ -132,14 +133,21 @@ void fireUIDs(void){
 //firing Routine that allows the firing PIC to control the line and send the 
 //blast command once the EDDs have gone through all other states
 void firePic(void){
-    unsigned char missingPulseCheck = 0;                                        //reset the missing pulse comparison variable
-    setRedLed();                                                                //set the red LED to indicate firing
+    unsigned char missingPulseCheck = 0;
+    setRedLed();
+    if(!ABB_1.info.statusBits.shaftFault)
+        disengageRelay();
+    FLAGS.fireComplete = 1;
     prepareForProgramming();
-    _delay_ms(3000);                                                            //delay for 3 seconds to wait for missing pulses after blast command                                                     //prepare timers,interrupts and supplies for programming
+    FLAGS.fireSuccessFlag = 1;
     CLRWDT();
-    programInitialise();                                                        //initialise the pins, ADC and variables
-    fireUIDs();                                                                 //program the UIDs for firing
-    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 160){//while missing pulses are still occurring and there have been less than 75
+    _delay_ms(3000);
+    CLRWDT();
+    EDD_Init_Comms();
+    CLRWDT();
+    FLAGS.fireComplete = 0;
+    fireUIDs();                                                           //program the UIDs for firing
+    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 180){//while missing pulses are still occurring and there have been less than 75
         missingPulseCheck = COUNTERS.missingPulses;                             //assign the current number of missing pulses to the comparison variable
         _delay_ms(1000);                                                        //wait 1 second so that at least 1 missing pulse should occur in this time
         CLRWDT();
