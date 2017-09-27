@@ -122,8 +122,8 @@ void sendPacket(void){
 //Determines whether we are processing AT command data from a the Bluetooth module 
 //or log data from a connected device
 void readEUSART(void){
-    COUNTERS.bluetoothTimer = mins1;
-    FLAGS.bluetoothTimer = mins1;
+    COUNTERS.bluetoothTimer = mins10;
+    FLAGS.bluetoothTimer = 0;
     if(bluetoothStatus.bluetoothSetup)                                          //if in setup mode
         receiveBluetoothSetup();                                                //process an AT Response
     else
