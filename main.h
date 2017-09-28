@@ -334,7 +334,7 @@ typedef union {
                unsigned char shaftTests;
                unsigned char missingPulses;
                unsigned char acPulses;
-               unsigned int bluetoothTimer;
+               unsigned long bluetoothTimer;
         };
 }COUNTERS_t;
 

@@ -38,6 +38,8 @@ extern void initialiseStates(void);
 extern void clearEDDStatusbits(void);
 extern void sleepBluetooth(void);
 
+extern void activateBluetooth(void);
+
 
 void program(void){
     CLRWDT();
@@ -50,9 +52,10 @@ void program(void){
 //    EDD_Energy_Store();
 //    _delay_ms(1000);
 //    EDD_Blast();
-//    addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the entire data memory to the outgoing queue to update changes on surface    
+    addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the entire data memory to the outgoing queue to update changes on surface    
     initialiseStates();                                                         //re-initalise the background processes to restart the state Handler
     returnFromProgramming();                                                    //prepare for normal device operation
+    activateBluetooth();                                                        //initialise the Bluetooth
 }
 
 void programInitialise(void){
@@ -63,7 +66,7 @@ void programInitialise(void){
 }                                                                               //clear the flag if we confirm that it is not
 
 void prepareForProgramming(void){
-    sleepBluetooth();
+    //sleepBluetooth();
     sec4Interrupt = 0;                                                          //disable the sleep interrupt
     sec4Enable = 0;                                                             //disable the sleep timer                                                   //turn on the 100us Delay Timer
     msInterrupt = 0;                                                            //Disable the State Handler 

@@ -51,7 +51,7 @@ void activateBluetooth(void){
     LAT_BT_ENABLE = 1;
     FLAGS.bluetooth = 1;                                                        //Set the Bluetooth flag so the state Handler knows to process it
     FLAGS.bluetoothTimer = 0;
-    COUNTERS.bluetoothTimer = mins1;
+    COUNTERS.bluetoothTimer = mins10;
     bluetoothStatus.bluetoothSetup = 1;                                         //Set the Setup Flag to send commands to the Bluetooth Module to configure it
     setupIndex = 0;                                                             //Ensure that the setup begins with the correct command
 }
@@ -306,7 +306,7 @@ void bluetooth(void) {
             
         case sendPacketToSurface :
             addDataToOutgoingQueue(ABB_1.det_arrays.UIDs, CMD_AB1_UID, sizeof(detonator_UID));
-            addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));
+            //addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));
             state.bluetooth.counter = 1;
             bluetoothStatus.packetReceived = 0;
             bluetoothStatus.ACKReady = 0;
