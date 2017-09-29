@@ -62,7 +62,7 @@ void programInitialise(void){
     clearEDDStatusbits();
     EDD_Init_Comms();                                                           //initialise pins and ADC for programming
     FLAGS.progSuccess = 1;                                                      //assume that programming will be successful and only
-    FLAGS.programCableFault = 0;
+    FLAGS.programStop = 0;
 }                                                                               //clear the flag if we confirm that it is not
 
 void prepareForProgramming(void){
@@ -129,7 +129,7 @@ void programUIDs(void){
             else                                                                //if programming was successful
                 ABB_1.det_arrays.info[i].data.connection_status = 1;            //indicate that the EDD is connected
             CLRWDT();
-            if(FLAGS.programCableFault){
+            if(FLAGS.programStop){
                 FLAGS.progSuccess = 0;
                 FLAGS.progComplete = 1;
                 return;
@@ -159,7 +159,7 @@ void programUIDs(void){
                     //FLAGS.progSuccess = 0;                                    //Clear the program success Flag
                     NOP();
             }
-            if(FLAGS.programCableFault){
+            if(FLAGS.programStop){
                 FLAGS.progSuccess = 0;
                 FLAGS.progComplete = 1;
                 return;
