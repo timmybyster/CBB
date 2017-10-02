@@ -199,7 +199,6 @@ void processBTPacket(void){
             return;
             
     }
-    btPacket.receive.command = 0;
     bluetoothStatus.ACKReady = 1;                                               //set the acknowledge bit so a response can be sent
 }
 
@@ -440,12 +439,12 @@ void sleepBluetooth(void){
 //data reception when sending setup commands to the module
 void receiveBluetoothSetup(void){
     index ++;                                                                   //every time new data is received increment the index
-    dataR[index] = uartReceiveByte;                                             //store the data in an array
     if(uartReceiveByte == '\n'){                                                //until the line end character has been received
         bluetoothStatus.dataReceived = 1;                                       //if it's the end of the line show that data has been received
         if(setupIndex >= 3){                                                    //if the setup index is 1 then all commands responses have been received
             bluetoothStatus.bluetoothSetup = 0;                                 //conclude the setup
-            state.led.next = solidBlue;                                         //Ensure the LED goes solid blue to indicate that bluetooth has been activated
+            if(!ABB_1.info.statusBits.key_switch_status)
+                state.led.next = solidBlue;                                     //Ensure the LED goes solid blue to indicate that bluetooth has been activated
         }
         index = 0;                                                              //reset the index to receive new data
     }
@@ -453,7 +452,10 @@ void receiveBluetoothSetup(void){
 
 //data reception when communicating with the Logger
 void receiveBluetooth(void){
-    dataR[index] = uartReceiveByte;
+    if(index > 15){
+        bluetoothStatus.startFound = 0;
+        index = 0;
+    }
     if(!bluetoothStatus.startFound){                                            //if it has received any data
         if(uartReceiveByte == startByte)                                        //if the data is a start byte
            bluetoothStatus.startFound = 1;                                      //indicate we have received a start byte
