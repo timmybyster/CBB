@@ -121,9 +121,12 @@ void ledStateHandler(void){
         }
         return;                                                                 //do not process any other conditions
     }
-    
+    unsigned short *statusBitsPtr;
+    statusBitsPtr= &ABB_1.info.statusBits;
+    *statusBitsPtr &= 0x0FFF;            
     switch (ABB_1.ledDeviceState){                                              //switch based on the current state of the device
         case idleDevice :                                                       //green flash 1 second intervals
+            *statusBitsPtr |= greenSingleFlash << 12; 
             switch (state.led.current){         
                 case ledOff :
                     state.led.next = flashGreen;                                //the led was off so now flash green                                
@@ -138,6 +141,7 @@ void ledStateHandler(void){
             break;
             
         case readyDevice :                                                      //green flash 1 second intervals
+            *statusBitsPtr |= greenSingleFlash << 12;
             switch (state.led.current){
                 case ledOff :
                     state.led.next = flashGreen;                                //the led was off so now flash green
@@ -150,6 +154,7 @@ void ledStateHandler(void){
             }
             break;   
         case cableFaultDevice :                                                 //red flash 1 second intervals
+            *statusBitsPtr |= redSingleFlash << 12;
             switch (state.led.current){
                 case flashRed :                                     
                     state.led.next = ledOff;                                    //the led was red so turn off
@@ -195,6 +200,7 @@ void ledStateHandler(void){
             }
             
         case detErrorDevice :                                                   //red flash 1 second interval
+            *statusBitsPtr |= redSingleFlash << 12;
             switch (state.led.current){
                 case ledOff :
                     state.led.next = flashRed;                                  //the led was off so now flash red
@@ -208,13 +214,20 @@ void ledStateHandler(void){
             break;
             
         case successDevice :                                                    //blue flash 1 second intervals
+            *statusBitsPtr |= blueDoubleFlash << 12;
             switch (state.led.current){
-                case ledOff :
-                    state.led.next = flashBlue;                                 //the led was off so now flash blue        
-                    break;
                 case flashBlue :
+                    state.led.next = offFlash;                                 //the led was off so now flash blue        
+                    break;
+                case offFlash :
+                    state.led.next = flashBlue2;                                 //the device was in an off flash state so now flash red the second time
+                    break;
+                case flashBlue2 :
                     state.led.next = ledOff;                                    //the led was blue so now turn off
                     break;
+                case ledOff :
+                    state.led.next = flashBlue;                                 //the led was off so flash red for the first time
+                    break;   
                 default :
                    state.led.next = flashBlue;                                  //coming from another state so flash blue for the first time
                     
@@ -222,6 +235,7 @@ void ledStateHandler(void){
             break;
             
         case failDevice :                                                       //double flash red
+            *statusBitsPtr |= redDoubleFlash << 12;
             switch (state.led.current){
                 case flashRed :
                     state.led.next = offFlash;                                  //the device flashed red for the first time so flash off
@@ -286,4 +300,18 @@ void ledSleep(void){
     TRIS_LED_RED = 1;
     TRIS_LED_BLUE = 1;
     TRIS_LED_GREEN = 1;
+}
+
+void updateStatusBitsSolidRed(void){
+    unsigned short *statusBitsPtr;
+    statusBitsPtr = &ABB_1.info.statusBits;
+    *statusBitsPtr &= 0x0FFF;
+    *statusBitsPtr |= redSolid << 12; 
+}
+
+void updateStatusBitsSolidBlue(void){
+    unsigned short *statusBitsPtr;
+    statusBitsPtr = &ABB_1.info.statusBits;
+    *statusBitsPtr &= 0x0FFF;
+    *statusBitsPtr |= blueSolid << 12; 
 }

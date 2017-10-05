@@ -50,6 +50,7 @@ extern void initialiseTimer1(void);
 void turnOffAcInterrupt(void);
 
 extern void setOffLed(void);
+extern void updateStatusBitsSolidBlue(void);
 extern void disengageRelay(void);
 
 void interrupt isr(void){
@@ -208,6 +209,10 @@ void device(void){
             FLAGS.bluetoothTimer = 0;                                           //clear the 10 minute timeout Flag    
             COUNTERS.bluetoothTimer = mins10;                                   //reload the 10 minute Counter
             FLAGS.bluetooth = 0;
+            break;
+            
+        case mainsDevice :
+            updateStatusBitsSolidBlue();
             break;
             
         case programDevice :

@@ -43,6 +43,21 @@
 #define tagRed         15
 //END OF LED STATES
 
+//LED INFO BITS
+#define redSingleFlash   0
+#define greenSingleFlash 1
+#define blueSingleFlash  2
+#define redDoubleFlash   3
+#define greenDoubleFlash 4
+#define blueDoubleFlash  5
+#define redSolid         6
+#define greenSolid       7
+#define blueSolid        8
+#define redFastFlash     9
+#define greenFastFlash   10
+#define blueFastFlash    11
+
+
 //LED TIMES
 #define TAG_TEST_TIME      10
 #define SOLID_ON_TIME      1000
