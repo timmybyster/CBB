@@ -56,6 +56,9 @@ volatile unsigned eddState,readFlag;
 unsigned char byteRead = 0;
 volatile unsigned char bitCounter = 0;
 
+#define programDisarmValue          0x02
+#define programCableFaultValue      0x316
+
 
 #endif EED_COMMS_H
 

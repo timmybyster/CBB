@@ -14,7 +14,6 @@
       <itemPath>eddComms.h</itemPath>
       <itemPath>shaftTest.h</itemPath>
       <itemPath>bluetooth.h</itemPath>
-      <itemPath>tag.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -540,14 +539,6 @@
         <property key="stack-type" value="compiled"/>
       </XC8-config-global>
       <item path="tag.c" ex="true" overriding="false">
-        <HI-TECH-COMP>
-        </HI-TECH-COMP>
-        <HI-TECH-LINK>
-        </HI-TECH-LINK>
-        <XC8-config-global>
-        </XC8-config-global>
-      </item>
-      <item path="tag.h" ex="true" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
         <HI-TECH-LINK>

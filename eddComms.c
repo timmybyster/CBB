@@ -20,6 +20,7 @@ void Tx_Calibration_Pulses_90(void);
 void initialiseEddADC(void);
 
 unsigned short readEddADC(void);
+void Delay_100usRead(void);
 unsigned char rxWordEDD(void);
 unsigned char EDDCommandResponse (unsigned char command, unsigned char TxLength, unsigned char RxLength, char *data,char *data2);
 unsigned char commandResponse(unsigned char TxLength, unsigned char RxLength, unsigned char *data);
@@ -92,6 +93,7 @@ void EDD_Init_Comms(void){
     tx = 0;                                                                     //clear tx
     
     Set_Line_High();                                                            //set the line high
+    previousADC = 0x100;                                                        //initialise the previous ADC value as intermediate
 }
 
 void initialiseEddADC(void){
@@ -193,7 +195,7 @@ unsigned char rxWordEDD(void){
 //Received words are stored in response in order of reception
 unsigned char commandResponse(unsigned char TxLength, unsigned char RxLength, unsigned char *data){
     Delay_ms(50);                                                               //wait 50ms before transmitting
-    if(previousADC > 0x316 || previousADC < 0x20)
+    if(previousADC > programCableFaultValue || previousADC < programDisarmValue)
         FLAGS.programStop = 1;
     for(int i = 0; i < TxLength; i++){                                          //for each word
         Tx_Word(*(data + i));                                                   //transmit the word
@@ -381,13 +383,17 @@ void EDD_Calibrate(void){
 void Tx_Calibration_Pulses(void)
 {
     for (int i = 0; i < CALIBRATION_PULSES; i++){                               //loop for the number of calibration pulses
+        if(previousADC > programCableFaultValue || previousADC < programDisarmValue){
+            FLAGS.programStop = 1;
+            return;
+        }
         Set_Line_Low();                                                         //set the line low
         for (int j = 0; j < 10 - PULSE_DUTY; j++){                              //for 10 - the pulse duty
             Delay_100us();                                                      //keep the line low for 100us
         }     
         Set_Line_High();                                                        //set the line high
         for (int j = 0; j < PULSE_DUTY; j++){                                   //for the duty cycle
-            Delay_100us();                                                      //keep the line high for 100us
+            Delay_100usRead();                                                      //keep the line high for 100us
         }
         CLRWDT();
     }
@@ -396,13 +402,17 @@ void Tx_Calibration_Pulses(void)
 void Tx_Calibration_Pulses_90(void)
 {
     for (int i = 0; i < CALIBRATION_PULSES; i++){                               //loop for the number of calibration pulses
+        if(previousADC > programCableFaultValue || previousADC < programDisarmValue){
+            FLAGS.programStop = 1;
+            return;
+        }
         Set_Line_Low();                                                         //set the line low
         for (int j = 0; j < 10 - 9; j++){                                       //for 10 - the pulse duty
             Delay_100us();                                                      //keep the line low for 100us
         }     
         Set_Line_High();                                                        //set the line high
         for (int j = 0; j < 9; j++){                                            //for the duty cycle
-            Delay_100us();                                                      //keep the line high for 100us
+            Delay_100usRead();                                                  //keep the line high for 100us
         }
         CLRWDT();
     }
@@ -487,4 +497,13 @@ unsigned short readEddADC(void){
     NOP();
     while (ADCON0bits.ADGO);                                                    //wait for conversion to finish
     return ADRES;                                                               //return the ADC in ADRES
+}
+
+//100us delay for EDD comms
+void Delay_100usRead(void){
+    us100DelayEnable = 1;                                                       //ensure that the timer is enabled
+    us100Interrupt = 1;                                                         //ensure that the interrupt is enabled
+    previousADC = readEddADC();
+    while(!FLAGS.us100);                                                        //wait for the 100us Flag
+    FLAGS.us100 = 0;                                                            //cleat the flag
 }

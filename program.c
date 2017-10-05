@@ -150,7 +150,12 @@ void programUIDs(void){
     }                                                                                                                                                                                                                                     
     unsigned char attempts;
     if(ABB_1.dets_length > 0){                                                  //if at this point there are EDDs connected
-        EDD_Calibrate();                                                        //calibrate them
+        EDD_Calibrate(); 
+        if(FLAGS.programStop){
+                FLAGS.progSuccess = 0;
+                FLAGS.progComplete = 1;
+                return;
+        }//calibrate them
         for(int i = 1; i <= ABB_1.dets_length; i++){                            //loop through all of them again
             if(ABB_1.det_arrays.info[i].data.connection_status){                //Only bother checking UIDs that have been programmed successfully  
                 attempts = 0;
