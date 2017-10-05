@@ -24,7 +24,7 @@ void addPacketToOutgoingQueue(char *data, unsigned char command, unsigned char l
     outgoingQueue.queue_store[outgoingQueue.queue_pointer].command = command;   //store the command in the queue
     outgoingQueue.queue_store[outgoingQueue.queue_pointer].data = data;         //create a pointer to the data that needs to be sent
     outgoingQueue.queue_store[outgoingQueue.queue_pointer].data_length = length;//store the length of the data to be sent
-    outgoingQueue.queue_store[outgoingQueue.queue_pointer].destination = destination;//store the destiantion the message should be sent to
+    outgoingQueue.queue_store[outgoingQueue.queue_pointer].destination = destination;//store the destination the message should be sent to
     if(outgoingQueue.length < outgoingQueueLength)                                                     //increment the queue length
         outgoingQueue.length++;
     outgoingQueue.queue_pointer++;                                              //increment the queue pointer
@@ -138,14 +138,16 @@ void handleIncomingQueuePacket(){
 }
 
 void addPacketToIncomingQueue(void){
-    if(PacketReadParamST7540(ST7540_CRC_VALID)){
+    unsigned short destination = PacketReadParamST7540(ST7540_DEST);
+    if(PacketReadParamST7540(ST7540_CRC_VALID) && destination == ABB_1.serial || destination == 0x3FFF){
         incomingQueue.queue_store[incomingQueue.queue_pointer].command = PacketReadParamST7540(ST7540_CMD);//store the command
         incomingQueue.queue_store[incomingQueue.queue_pointer].data_length = PacketReadParamST7540(ST7540_DATA_LEN);//store the data length
+        if(incomingQueue.queue_store[incomingQueue.queue_pointer].data_length >= maxData) incomingQueue.queue_store[incomingQueue.queue_pointer].data_length = maxData;//limit the number of bytes that can be stored to the maxData length
         incomingQueue.queue_store[incomingQueue.queue_pointer].packet_number = PacketReadParamST7540(ST7540_NUMBER);//store the packet number
         incomingQueue.queue_store[incomingQueue.queue_pointer].source = PacketReadParamST7540(ST7540_SOURCE);//store the source of the packet
-        incomingQueue.queue_store[incomingQueue.queue_pointer].destination = PacketReadParamST7540(ST7540_DEST);//store the destination
+        incomingQueue.queue_store[incomingQueue.queue_pointer].destination = destination;//store the destination
         for (int i = 0; i < incomingQueue.queue_store[incomingQueue.queue_pointer].data_length; i++){//for the length of the data
-            incomingQueue.queue_store[incomingQueue.queue_pointer].data[i] = *(PacketDataST7540() + i);//store each byte in the queue
+                incomingQueue.queue_store[incomingQueue.queue_pointer].data[i] = *(PacketDataST7540() + i);//store each byte in the queue
         }
         incomingQueue.length++;
         incomingQueue.queue_pointer++;

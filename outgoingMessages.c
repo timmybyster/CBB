@@ -45,6 +45,7 @@ void outgoingMessages(void){
             state.outgoingMessages.counter = buildOutGoingMessagePeriod;        //load the counter to move to the next state
             FLAGS.acknowledgeCCB = 1;                                           //set the acknowledge Flag to wait for the data to be received by the CCB
             buildMessageST7540();                                               //build a message to be sent to the surface from the queue                                               
+            outgoingQueue.length--;                                                     //decrement the length of the outgoing queue to remove the packet from the queue
             COUNTERS.communicationStatus = noCommsPeriod;
             break;
             

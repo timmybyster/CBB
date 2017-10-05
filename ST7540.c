@@ -181,7 +181,8 @@ void SPIISRHandlerST7540(void){
         }
         SSP1BUF = bufferTXST7540UCA[bufferTXNextUCA++];                         //Send next byte
     }else if(flagST7540 & FLAG_ST7540_RX_ACTIVE){                               //Are we in RX mode
-        bufferRXST7540UCA[bufferRXNextUCA++] = dataReadUC;                      //Read next byte
+        bufferRXST7540UCA[bufferRXNextUCA] = dataReadUC;                      //Read next byte
+        if(++bufferRXNextUCA>=ST7540_MAX_PACKET_LEN) bufferRXNextUCA = ST7540_MAX_PACKET_LEN -1;
         if(bufferRXST7540UCA[0] == bufferRXNextUCA){                            //Entire packet read?
             flagST7540 |= FLAG_ST7540_DATA_READY;                               //Mark data as ready
             flagST7540 &= ~FLAG_ST7540_RX_ACTIVE;                               //Disable RX mode
@@ -196,6 +197,7 @@ void SPIISRHandlerST7540(void){
 void RXReadyISRHandlerST7540(void){
     //finish this for pin change int?
     char ReadIOCC;
+    bufferRXNextUCA = 0;
     if((flagST7540 & FLAG_ST7540_RX_ACTIVE) && !PORT_n_CD_PD)                   //If in RX mode and get SS pulse
         SSP1CON1bits.SSPEN = 1;                                                 //Enable SPI
     ReadIOCC = PORT_CLR_T_IOC;                                                  //Read the state of PORT_CLR_T_IOC to fascilitate clearing interrupt flag
@@ -247,8 +249,6 @@ void buildMessageST7540(void){
     bufferTXST7540UCA[dataBufLocUC++] = packetCRCUS >> 8;                       //shift it into the outgoing buffer
     bufferTXST7540UCA[dataBufLocUC] = packetCRCUS;
     bufferTXLenUCA = dataBufLocUC;                                              //let the MSSP know how many bytes are intended to be sent
-    
-    outgoingQueue.length--;                                                     //decrement the length of the outgoing queue to remove the packet from the queue
 }
 
 void StartTransmitST7540(void){
