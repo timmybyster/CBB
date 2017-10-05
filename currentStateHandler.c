@@ -104,12 +104,6 @@ void currentStateHandler(void){
     }                                                                           //so when all processes have been executed the handler waits
     else{                                                       
         state.device = wait;                                                    //otherwise if there's nothing in the queue
-        state.outgoingMessages.flag = 0;                                        //clear all the flags to ensure that they can be added appropriately
-        state.bluetooth.flag = 0;
-        state.incomingCommands.flag = 0;
-        state.readKeyCable.flag = 0;
-        state.readSupply.flag = 0;
-        state.shaftTest.flag = 0;
     }
 }
 
