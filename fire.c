@@ -30,6 +30,7 @@ void fireUIDs(void);
 void checkForUnfiredEdds(void);
 
 extern void setRedLed(void);
+extern void setBlueLed(void);
 extern void initialiseTimer0(void);
 extern void initialiseTimer1(void);
 extern void programInitialise(void);
@@ -88,6 +89,7 @@ void fire(void){
 void checkForUnfiredEdds(void){
     CLRWDT();
     Set_Line_Low();                                                             //set the line low
+    setBlueLed();
     WDTCON0bits.SEN = 0;
     _delay_ms(10000);                                                           //wait for the EDDs to reset
     WDTCON0bits.SEN = 1;
@@ -147,20 +149,20 @@ void firePic(void){
     CLRWDT();
     FLAGS.fireComplete = 0;
     fireUIDs();                                                           //program the UIDs for firing
-    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 180){//while missing pulses are still occurring and there have been less than 75
+    while(missingPulseCheck < COUNTERS.missingPulses && COUNTERS.missingPulses < 180){//while missing pulses are still occurring and there have been less than 180
         missingPulseCheck = COUNTERS.missingPulses;                             //assign the current number of missing pulses to the comparison variable
         _delay_ms(1000);                                                        //wait 1 second so that at least 1 missing pulse should occur in this time
         CLRWDT();
     }
     WDTCON0bits.SEN = 0;
-    if(COUNTERS.missingPulses >= 100){                                          //if at least 75 missing pulses have occurred there is intent to fir
-        EDD_Energy_Store();                                                     //so charge the EDDs
-        Set_Line_High();                                                        //90 Secs
-        _delay_ms(5000);                                                        
-        Set_Line_Low();                                                         //95 Secs
-        _delay_ms(20000);                                                       //give the firing pic time to fire
-    }
-    else{                                                                       //115 Secs
+    if(COUNTERS.missingPulses >= 100){                                          //if at least 100 missing pulses have occurred there is intent to fire
+        EDD_Energy_Store();                                                     //so charge the EDDs @ 180 missing pulses
+        Set_Line_High();                                                        //set the line High
+        _delay_ms(5000);                                                        //200 missing pulses
+        Set_Line_Low();                                                         //Set the line low
+        _delay_ms(15000);                                                       //210 missing pulses
+    }                                                                           //240 missing pulses
+    else{                                                                       
         FLAGS.fireSuccessFlag = 0;                                              //there were not enough missing pulses so firing was unsuccessful
     }
     CLRWDT();
