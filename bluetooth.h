@@ -77,6 +77,11 @@ unsigned char dataR[25];
 #define CMD_BT_END                  3
 #define CMD_BT_STATUS               4
 #define CMD_BT_BOOT                 5
+#define CMD_BT_EDD_LENGTH           6
+#define CMD_BT_UID                  7
+#define CMD_BT_PROGRAMMING          8
+#define CMD_BT_CALIBRATING          9
+#define CMD_BT_SELF_CHECKING        10
 
 //BLUETOOTH STATES
 #define     deviceIdle              5
@@ -105,5 +110,7 @@ unsigned char dataR[25];
 //BLUETOOTH STATE TIMES
 #define setupWaitPeriod     300
 #define processPeriod       1
+
+//ProgrammingStages
 
 #endif BLUETOOTH_H

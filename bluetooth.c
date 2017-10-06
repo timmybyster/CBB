@@ -192,8 +192,27 @@ void processBTPacket(void){
             btPacket.send.data[1] = (*tempDetInfo)&0xF0;
             break;
             
-        case CMD_BT_BOOT:
+        case CMD_BT_BOOT :
             RESET();
+            break;
+            
+        case CMD_BT_EDD_LENGTH :
+            btPacket.send.size += 1;
+            btPacket.send.data[0] = ABB_1.dets_length;
+            break;
+            
+        case CMD_BT_UID :
+            if(btPacket.receive.data[0] > ABB_1.dets_length){                   //if the request is for a window that does not have an EDD
+                bluetoothStatus.ACKReady = 0;
+                return;
+            }    
+            btPacket.send.size += 6;                                            
+            for (int i = 0; i < 4; i++){
+                btPacket.send.data[i] = ABB_1.det_arrays.UIDs[btPacket.receive.data[0]].UID[i];
+            }
+            btPacket.send.data[4] = ABB_1.det_arrays.info[btPacket.receive.data[0]].delay >> 8;
+            btPacket.send.data[5] = ABB_1.det_arrays.info[btPacket.receive.data[0]].delay;
+            break;
             
         default :
             return;
