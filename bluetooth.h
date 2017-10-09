@@ -111,6 +111,9 @@ unsigned char dataR[25];
 #define setupWaitPeriod     300
 #define processPeriod       1
 
-//ProgrammingStages
+//PROGRAMMING STAGES
+#define programming         1
+#define calibrating         2
+#define selfChecking        3
 
 #endif BLUETOOTH_H

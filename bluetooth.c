@@ -543,3 +543,29 @@ void resetBluetooth(void){
     _delay_us(100);
     bluetoothStatus.dataReceived = 0;
 }
+
+void transmitBluetoothProgressPacket(unsigned char index, unsigned char stage){
+    btPacket.send.start = startByte;                                            //Build the response packet beginning with the start byte
+    btPacket.send.size = MIN_BT_LENGTH;                                         //set the response size to the minimum 
+    switch(stage){
+        case programming :
+            btPacket.send.size += 1;
+            btPacket.send.command = CMD_BT_PROGRAMMING;
+            btPacket.send.data[0] = index;
+            break;
+            
+        case calibrating :
+            btPacket.send.size += 1;
+            btPacket.send.command = CMD_BT_CALIBRATING;
+            btPacket.send.data[0] = index;
+            break;
+            
+        case selfChecking :
+            btPacket.send.size += 1;
+            btPacket.send.command = CMD_BT_SELF_CHECKING;
+            btPacket.send.data[0] = index;
+            break;
+    }
+    uartEnable = 1;                                                             //enable the uart      
+    sendPacket();
+}

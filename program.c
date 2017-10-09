@@ -39,6 +39,7 @@ extern void clearEDDStatusbits(void);
 extern void sleepBluetooth(void);
 
 extern void activateBluetooth(void);
+void transmitBluetoothProgressPacket(unsigned char index, unsigned char stage);
 
 
 void program(void){
@@ -55,7 +56,7 @@ void program(void){
     addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the entire data memory to the outgoing queue to update changes on surface    
     initialiseStates();                                                         //re-initalise the background processes to restart the state Handler
     returnFromProgramming();                                                    //prepare for normal device operation
-    activateBluetooth();                                                        //initialise the Bluetooth
+    //activateBluetooth();                                                        //initialise the Bluetooth
 }
 
 void programInitialise(void){
@@ -134,7 +135,7 @@ void programUIDs(void){
                 FLAGS.progComplete = 1;
                 return;
             }
-                
+            transmitBluetoothProgressPacket(i, 1);
         }
     }
     _delay_ms(1000);
@@ -150,6 +151,7 @@ void programUIDs(void){
     }                                                                                                                                                                                                                                     
     unsigned char attempts;
     if(ABB_1.dets_length > 0){                                                  //if at this point there are EDDs connected
+        transmitBluetoothProgressPacket(0, 2);
         EDD_Calibrate(); 
         if(FLAGS.programStop){
                 FLAGS.progSuccess = 0;
@@ -169,6 +171,7 @@ void programUIDs(void){
                 FLAGS.progComplete = 1;
                 return;
             }
+            transmitBluetoothProgressPacket(i, 3);
             CLRWDT();
         }
     }
