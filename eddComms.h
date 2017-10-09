@@ -36,9 +36,9 @@
         
 #define CHANNEL_EDDRead             0b00100111
               
-#define WORD_DELAY          13
-#define ENERGY_STORE_DELAY  10000
-#define CALIBRATION_PULSES  10010
+#define WORD_DELAY              13
+#define ENERGY_STORE_DELAY      10000
+#define PRE_PULSE_DUTY      9
 #define PULSE_DUTY          5                                                   //Calibration pulse duty cycle as a factor of 10
 #define maxAttempts         4
 //ADC Constants        

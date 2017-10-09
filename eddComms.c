@@ -15,8 +15,7 @@ void Tx_Word(unsigned char byte);
 void Tx_Start_Bit(void);
 unsigned char detectRisingEdgeEDD(unsigned char change);
 unsigned char detectFallingEdgeEDD(unsigned char change);
-void Tx_Calibration_Pulses(void);
-void Tx_Calibration_Pulses_90(void);
+void Tx_Calibration_Pulses(unsigned char duty10Percent);
 void initialiseEddADC(void);
 
 unsigned short readEddADC(void);
@@ -24,6 +23,7 @@ void Delay_100usRead(void);
 unsigned char rxWordEDD(void);
 unsigned char EDDCommandResponse (unsigned char command, unsigned char TxLength, unsigned char RxLength, char *data,char *data2);
 unsigned char commandResponse(unsigned char TxLength, unsigned char RxLength, unsigned char *data);
+unsigned short determineMaxDelay(void);
 
 unsigned char programUID(unsigned char window);
 
@@ -368,56 +368,39 @@ void EDD_Calibrate(void){
     unsigned char EDD_calibration_command;                      
     EDD_calibration_command = EDD_CALIBRATE_COMMAND;                            //prepare the instruction
     
-    Tx_Calibration_Pulses_90();
+    Tx_Calibration_Pulses(PRE_PULSE_DUTY);
     Delay_ms(WORD_DELAY); 
     Delay_ms(WORD_DELAY);
     Delay_ms(WORD_DELAY); 
     Tx_Word(EDD_calibration_command);                                           //transmit the command
     Delay_ms(WORD_DELAY);                                                       //delay 13ms
     
-    Tx_Calibration_Pulses();                                                    //send the calibration pulses
+    Tx_Calibration_Pulses(PULSE_DUTY);                                          //send the calibration pulses
     Set_Line_High();                                                            //set the line high
     Delay_ms(3000);                                                             //wait 3 seconds
 }
 
-void Tx_Calibration_Pulses(void)
-{
+void Tx_Calibration_Pulses(unsigned char duty10Percent){
+    unsigned short CALIBRATION_PULSES;
+    CALIBRATION_PULSES = determineMaxDelay();
+    CALIBRATION_PULSES += 100;
+    
     for (int i = 0; i < CALIBRATION_PULSES; i++){                               //loop for the number of calibration pulses
         if(previousADC > programCableFaultValue || previousADC < programDisarmValue){
             FLAGS.programStop = 1;
             return;
         }
         Set_Line_Low();                                                         //set the line low
-        for (int j = 0; j < 10 - PULSE_DUTY; j++){                              //for 10 - the pulse duty
+        for (int j = 0; j < 10 - duty10Percent; j++){                              //for 10 - the pulse duty
             Delay_100us();                                                      //keep the line low for 100us
         }     
         Set_Line_High();                                                        //set the line high
-        for (int j = 0; j < PULSE_DUTY; j++){                                   //for the duty cycle
+        for (int j = 0; j < duty10Percent; j++){                                   //for the duty cycle
             Delay_100usRead();                                                      //keep the line high for 100us
         }
         CLRWDT();
     }
 }
-
-void Tx_Calibration_Pulses_90(void)
-{
-    for (int i = 0; i < CALIBRATION_PULSES; i++){                               //loop for the number of calibration pulses
-        if(previousADC > programCableFaultValue || previousADC < programDisarmValue){
-            FLAGS.programStop = 1;
-            return;
-        }
-        Set_Line_Low();                                                         //set the line low
-        for (int j = 0; j < 10 - 9; j++){                                       //for 10 - the pulse duty
-            Delay_100us();                                                      //keep the line low for 100us
-        }     
-        Set_Line_High();                                                        //set the line high
-        for (int j = 0; j < 9; j++){                                            //for the duty cycle
-            Delay_100usRead();                                                  //keep the line high for 100us
-        }
-        CLRWDT();
-    }
-}
-
 //sends the commands to tell the EDDs to store Energy before firing
 void EDD_Energy_Store(void){                                                
     unsigned char EDD_energy_store_command;
@@ -506,4 +489,13 @@ void Delay_100usRead(void){
     previousADC = readEddADC();
     while(!FLAGS.us100);                                                        //wait for the 100us Flag
     FLAGS.us100 = 0;                                                            //cleat the flag
+}
+
+unsigned short determineMaxDelay(void){
+    unsigned short maxDelay = 0;
+    for (int i = 1; i < ABB_1.dets_length; i ++){
+        if(maxDelay < ABB_1.det_arrays.info[i].delay)
+            maxDelay = ABB_1.det_arrays.info[i].delay;
+    }
+    return maxDelay;
 }
