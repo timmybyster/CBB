@@ -33,6 +33,11 @@ void msIsr(void){
     FLAGS.ms = 1;                                                               //set the ms Flag
     stateCounterHandler();                                                      //process the states for Background Processes
     
+    if(!COUNTERS.checkStatusBits)
+        FLAGS.checkStatusBits = 1;
+    else
+        COUNTERS.checkStatusBits--;
+    
     if(!COUNTERS.sec3)                                                          //if the 3 second counter has reached zero
         FLAGS.sec3 = 1;                                                         //set the flag 
     else

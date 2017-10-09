@@ -111,6 +111,7 @@ void main(void) {
     ABB_1.destination = 0xFFFF;    
     initialise();                                                               //initialise the device
     while(1){                                                                   //loop forever
+        checkStatusBits();
         device();                                                               //execute based on the current State
         deviceStateHandler();                                                   //determine the next device State
     }
@@ -125,20 +126,17 @@ void device(void){
             break;
             
         case shaftDevice :
-            checkStatusBits();                                                   //check to see if anything has changed  
             currentStateHandler();                                               //execute any background processes
             FLAGS.shaftCheck = 1;
             break;
             
         case voltageDevice :
-            checkStatusBits();                                                   //check to see if anything has changed  
             currentStateHandler();                                               //execute any background processes
             disengageRelay();
             FLAGS.shaftComplete = 0;
             break;
 
         case idleDevice :
-           checkStatusBits();                                                   //check to see if anything has changed  
            currentStateHandler();                                               //execute any background processes
            FLAGS.shaftComplete = 0;
            FLAGS.min10 = 1;                                                     //set the 10 minute Flag so programming will commence as soon as the Key is armed
@@ -152,13 +150,11 @@ void device(void){
            break;
            
         case cableFaultDevice :
-           checkStatusBits();                                                   //check to see if anything has changed
            currentStateHandler();                                               //execute any background processes
            ABB_1.ledDeviceState = ABB_1.deviceState;                            //Set the LED behaviour to indicate a shaft Fault
            break;
         
         case lowBatDevice :
-           checkStatusBits();                                                   //check to see if anything has changed
            currentStateHandler();                                               //execute any background processes
            ABB_1.ledDeviceState = ABB_1.deviceState;                            //Set the LED behaviour to indicate a shaft Fault
            break;
@@ -168,7 +164,6 @@ void device(void){
             break;
             
         case offDevice :
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             break;
             
@@ -177,7 +172,6 @@ void device(void){
             break;
             
         case readyDevice:
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             ABB_1.ledDeviceState = ABB_1.deviceState;                           //Set the LED behaviour to indicate the device is ready to fire
             ABB_1.info.statusBits.ready = 1;
@@ -188,7 +182,6 @@ void device(void){
             break;
             
         case detErrorDevice :
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             ABB_1.ledDeviceState = ABB_1.deviceState;                           //Set the LED behaviour to indicate the device is ready to fire
             ABB_1.info.statusBits.detError = 1;
@@ -229,19 +222,16 @@ void device(void){
             break;
             
         case fireCheckDevice :
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             break;
             
         case successDevice :
             ABB_1.ledDeviceState = ABB_1.deviceState;                           //Set the LED behaviour to indicate the device fired successfully 
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             break;
             
         case failDevice :
             ABB_1.ledDeviceState = ABB_1.deviceState;                           //Set the LED behaviour to indicate the device did not fire successfully 
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             break;
             
@@ -252,7 +242,6 @@ void device(void){
             break;
             
         default :
-            checkStatusBits();                                                  //check to see if anything has changed
             currentStateHandler();                                              //execute any background processes
             break;
     }
@@ -308,14 +297,18 @@ void deviceStateHandler(void){
             break;
         
         case mainsDevice :
-            if(ABB_1.info.statusBits.mains)                                     //check to see whether mains has been detected
-                ABB_1.deviceState = bluetoothKeyDevice;                         //if so then check to see whether the bluetooth should be activated
-            else{
-                if(ABB_1.info.statusBits.lowBat)                                //no mains so check if low battery should be indicated
-                    ABB_1.deviceState = lowBatDevice;
-                else
-                   ABB_1.deviceState = bluetoothKeyDevice;                      //otherwise check to see whether bluetooth should be activated 
+            if(!outgoingQueue.length){
+                if(ABB_1.info.statusBits.mains)                                     //check to see whether mains has been detected
+                    ABB_1.deviceState = bluetoothKeyDevice;                         //if so then check to see whether the bluetooth should be activated
+                else{
+                    if(ABB_1.info.statusBits.lowBat)                                //no mains so check if low battery should be indicated
+                        ABB_1.deviceState = lowBatDevice;
+                    else
+                       ABB_1.deviceState = bluetoothKeyDevice;                      //otherwise check to see whether bluetooth should be activated 
+                }
             }
+            else
+                ABB_1.deviceState = mainsDevice;
             break;
                 
         case lowBatDevice :                                                     
@@ -434,6 +427,11 @@ void deviceStateHandler(void){
 //to the CCB
 void checkStatusBits(void){ 
     unsigned short *status;
+    if(!FLAGS.checkStatusBits){
+        return;
+    }
+    COUNTERS.checkStatusBits = secs1;
+    FLAGS.checkStatusBits = 0;
     status = &ABB_1.info.statusBits;                                            //create a pointer to the current status bits
     if(*status != previousStatus){                                              //compare the value of the current pointer to the previous value
         addPacketToOutgoingQueue(0, CMD_AB1_DATA, 0, ABB_1.destination);        //if its changed add a data packet to the outgoing queue

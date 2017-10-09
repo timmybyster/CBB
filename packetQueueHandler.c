@@ -93,7 +93,7 @@ unsigned char getIndexByUID(unsigned char *UID){
 }
 
 
-void handleIncomingQueuePacket(){
+void handleIncomingQueuePacket(void){
     unsigned char index = 0; 
     if(incomingQueue.queue_pointer >= incomingQueue.length)                     //determine which message should be sent
         index = incomingQueue.queue_pointer - incomingQueue.length;             //the queue resides within the bounds of the queue length
@@ -112,14 +112,18 @@ void handleIncomingQueuePacket(){
             FLAGS.fireFlag = 1;                                                 //set the fire Flag
             break;
             
-        case CMD_AB1_DATA :
-            if(incomingQueue.queue_store[index].destination == ABB_1.serial)
-                FLAGS.acknowledgeCCB = 0;
+        case CMD_AB1_DATA :                                                     //the CCB has acknowledged
+            if(incomingQueue.queue_store[index].destination == ABB_1.serial){   //if this is the intended serial that has been acknowledged
+                state.outgoingMessages.counter = 1;                             //clear the process counter so the CBB moves on immediately
+                FLAGS.acknowledgeCCB = 0;                                       //clear the Flag to show there is no need to wait for an acknowledge    
+            }
             break;
             
-        case CMD_AB1_UID :
-            if(incomingQueue.queue_store[index].destination == ABB_1.serial)
-                FLAGS.acknowledgeCCB = 0;
+        case CMD_AB1_UID :                                                      //the CCB has acknowledged
+            if(incomingQueue.queue_store[index].destination == ABB_1.serial){   //if this is the intended serial that has been acknowledged
+                state.outgoingMessages.counter = 1;                             //clear the process counter so the CBB moves on immediately
+                FLAGS.acknowledgeCCB = 0;                                       //clear the Flag to show there is no need to wait for an acknowledge    
+            }
             break;
             
         case CMD_FORCE_DEFAULT :

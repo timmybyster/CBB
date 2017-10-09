@@ -45,7 +45,6 @@ void outgoingMessages(void){
             state.outgoingMessages.counter = buildOutGoingMessagePeriod;        //load the counter to move to the next state
             FLAGS.acknowledgeCCB = 1;                                           //set the acknowledge Flag to wait for the data to be received by the CCB
             buildMessageST7540();                                               //build a message to be sent to the surface from the queue                                               
-            outgoingQueue.length--;                                                     //decrement the length of the outgoing queue to remove the packet from the queue
             COUNTERS.communicationStatus = noCommsPeriod;
             break;
             
@@ -54,8 +53,19 @@ void outgoingMessages(void){
             break;
             
         case transmit :
-            state.outgoingMessages.counter = transmitPeriod;                    //load the counter to move to the next state
+            state.outgoingMessages.counter = transmitTimeoutPeriod;             //load the counter to move to the next state
             StartTransmitST7540();                                              //start transmitting the message
+            break;
+            
+        case confirmAck :
+            state.outgoingMessages.counter = 1;
+            break;
+            
+        case removeFromQueue :
+            outgoingQueue.length--;                                             //decrement the length of the outgoing queue to remove the packet from the queue
+            state.outgoingMessages.counter = 1;
+            break;
+            
     }                                                                           
     
 }
@@ -65,9 +75,7 @@ void outgoingMessages(void){
 void outgoingMessagesStateHandler(void){
     switch(state.outgoingMessages.current){
         case checkQueue : 
-            if(FLAGS.acknowledgeCCB)
-                state.outgoingMessages.next = lineClear;                         //the acknowledge has not been received so send the message again
-            else if (outgoingQueue.length > 0)                                  //if there is a message in the queue                                      
+            if (outgoingQueue.length > 0)                                       //if there is a message in the queue                                      
                 state.outgoingMessages.next = buildMessage;                     //build the  next message
             else
                 state.outgoingMessages.next = checkQueue;                       //otherwise wait for something in the queue
@@ -85,7 +93,18 @@ void outgoingMessagesStateHandler(void){
             break;
             
         case transmit :
-            state.outgoingMessages.next = checkQueue;                           //after the message has been sent check the queue for more messages
+            state.outgoingMessages.next = confirmAck;                           //after the message has been sent check the queue for more messages
+            break;
+            
+        case confirmAck :
+            if(FLAGS.acknowledgeCCB)                                            //check if the CCB has acknowledged
+                state.outgoingMessages.next = buildMessage;                     //if it has not yet acknowledged send the same packet again
+            else
+                state.outgoingMessages.next = removeFromQueue;                  //otherwise remove it from the queue
+            break;
+            
+        case removeFromQueue :
+            state.outgoingMessages.next = checkQueue;                           //check the queue for new packets to be sent
             break;
             
         default :

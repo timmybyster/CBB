@@ -319,6 +319,7 @@ typedef union {
                unsigned acknowledgeCCB          :1;
                unsigned programStop             :1;
                unsigned tagConnected            :1;
+               unsigned checkStatusBits         :1;
         };
 }FLAGS_t;
 
@@ -336,6 +337,7 @@ typedef union {
                unsigned char missingPulses;
                unsigned char acPulses;
                unsigned long bluetoothTimer;
+               unsigned short checkStatusBits;
         };
 }COUNTERS_t;
 
