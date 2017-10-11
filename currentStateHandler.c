@@ -25,6 +25,8 @@ extern void shaftTestStateHandler(void);
 extern void shaftTest(void);
 extern void bluetoothStateHandler(void);
 extern void bluetooth(void);
+extern void tagStateHandler(void);
+extern void tag(void);
 
 /*The current State Handler manages all background processes and acts as a form 
  * of multi-tasking allowing processes to run independently and asynchronously 
@@ -90,6 +92,12 @@ void currentStateHandler(void){
             state.bluetooth.flag = 0;                                           //clear the bluetooth process Flag to indicate to the state 
             break;                                                              //handler that this context has been executed.
             
+        case tagState :
+            tag();                                                              //execute code based on the context of the tag process
+            tagStateHandler();                                                   //determine the next state of the tag process 
+            state.tag.flag = 0;                                                 //clear the tag process Flag to indicate to the state 
+            break;   
+            
         default :
             break;
     }
@@ -135,6 +143,7 @@ void stateCounterHandler(void){
             checkCounter(&state.readSupply);                                    //check for mains and the battery voltage level
             checkCounter(&state.led);                                           //Flash the LED accordingly
             checkCounter(&state.readKeyCable);                                  //check for cable Faults and the key switch
+            checkCounter(&state.tag);                                           //check for the tag
             if(FLAGS.bluetooth)                                                 //if bluetooth has been activated
                 checkCounter(&state.bluetooth);                                 //process bluetooth data
             if(FLAGS.shaftCheck)                                                //if we should be performing a shaft check
@@ -170,4 +179,5 @@ void updateStateIds(void){
     state.readKeyCable.id = readKeyCableState;
     state.readSupply.id = readSupplyState;
     state.shaftTest.id = shaftTestState;
+    state.tag.id = tagState;
 }

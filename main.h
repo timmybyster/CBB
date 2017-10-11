@@ -365,6 +365,7 @@ typedef struct{
     states incomingCommands;
     states shaftTest;
     states bluetooth;
+    states tag;
 }state_struct;
 
 state_struct state;
@@ -415,6 +416,7 @@ state_struct state;
 #define shaftTestState           11
 #define eddGlobalState           12
 #define bluetoothState           13
+#define tagState                 14
 
 //END OF STATES
 

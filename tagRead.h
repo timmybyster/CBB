@@ -14,21 +14,22 @@
 #define halfBitPeriod           6  
 
 //PIN DEFINITIONS
-#define TRIS_TAG_UIO                    TRISEbits.TRISE2
-#define ANSEL_TAG_UIO                   ANSELEbits.ANSELE2
-#define LAT_TAG_UIO                     LATEbits.LATE2
-#define PORT_TAG_UIO                    PORTEbits.RE2
-#define WPU_TAG_UIO                     WPUEbits.WPUE2
+#define TRIS_TAG_UIO                    TRISEbits.TRISE3
+#define ANSEL_TAG_UIO                   ANSELEbits.ANSELE3
+#define LAT_TAG_UIO                     LATEbits.LATE3
+#define PORT_TAG_UIO                    PORTEbits.RE3
+#define WPU_TAG_UIO                     WPUEbits.WPUE3
 
-#define TRIS_TAG_UIO_1                  TRISEbits.TRISE3
-#define ANSEL_TAG_UIO_1                 ANSELEbits.ANSELE3
-#define LAT_TAG_UIO_1                   LATEbits.LATE3
-#define PORT_TAG_UIO_1                  PORTEbits.RE3
+#define TRIS_TAG_UIO_1                  TRISEbits.TRISE2
+#define ANSEL_TAG_UIO_1                 ANSELEbits.ANSELE2
+#define LAT_TAG_UIO_1                   LATEbits.LATE2
+#define PORT_TAG_UIO_1                  PORTEbits.RE2
+#define WPU_TAG_UIO_1                   WPUEbits.WPUE2
 //END OF PIN DEFINITIONS
 
 //ADC DEFINITIONS
-#define tagADCChannel           0b00100010
-#define tagADCChannel_1         0b00100011
+#define tagADCChannel           0b00100011
+#define tagADCChannel_1         0b00100010
 #define tagEdgeDifference       20
 //END OF ADC DEFINTIONS
 

@@ -114,7 +114,7 @@ void led(void){
 void ledStateHandler(void){
     if(state.led.current == tagRed || state.led.current == tagGreen){           //special case if an EDD has been tagged
         if(COUNTERS.sec2 < secs2){                                              //if it has been at least 1 second
-            if(checkIfTagIsRemoved() || FLAGS.sec2)                             //wait until the tag has been removed or 3 seconds has passed
+            if(!FLAGS.tagConnected || FLAGS.sec2)                                //wait until the tag has been removed or 3 seconds has passed
                 state.led.next = ledOff;                                        //if so then turn off the LED
             else
                 state.led.next = state.led.current;                             //otherwise maintain the current status     

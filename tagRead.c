@@ -602,6 +602,7 @@ unsigned char READ_TAG_REVERSE(void){
 }
 
 void readTagRoutine(void){
+    tagInterrupt = 0;
     sec4Enable = 0;
     if(ABB_1.info.statusBits.key_switch_status)                                 //if the key switch is armed then
         return;                                                                 //return and do not allow tagging
@@ -636,6 +637,7 @@ void tagFor0(void){
     TRIS_TAG_UIO = 0;                                                           //set the pin as an output
     TRIS_TAG_UIO_1 = 0;                                                         //set the pin as an output
     WPU_TAG_UIO = 0;                                                            //disable the weak pull up
+    WPU_TAG_UIO_1 = 0;                                                          //disable the weak pull up
     
     LAT_TAG_UIO_1 = 0;                                                          //set the pin low
     LAT_TAG_UIO = 1;                                                            //set the pin high
@@ -646,6 +648,7 @@ void tagFor1(void){
     TRIS_TAG_UIO = 0;                                                           //set the pin as an output
     TRIS_TAG_UIO_1 = 0;                                                         //set the pin as an output
     WPU_TAG_UIO = 0;                                                            //disable the weak pull up
+    WPU_TAG_UIO_1 = 0;                                                          //disable the weak pull up
     
     LAT_TAG_UIO_1 = 1;                                                          //set the pin high
     LAT_TAG_UIO = 0;                                                            //set the pin low
