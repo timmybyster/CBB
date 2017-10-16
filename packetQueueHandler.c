@@ -126,6 +126,10 @@ void handleIncomingQueuePacket(void){
             }
             break;
             
+        case CMD_SEND_DEFAULT :
+            addPacketToOutgoingQueue(0, CMD_AB1_DATA, 0, ABB_1.destination);        //if its changed add a data packet to the outgoing queue
+            break;
+            
         case CMD_FORCE_DEFAULT :
             addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));
             break;

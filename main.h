@@ -422,6 +422,7 @@ state_struct state;
 
 //COMMAND DEFINITIONS
 #define cmdPing                 0x29
+#define CMD_SEND_DEFAULT        0b00000000
 #define CMD_FORCE_DEFAULT       0b01000000
 #define CMD_SEND_TEMPERATURE    0b00000100
 #define CMD_OPEN_RELAY          0b00000110
