@@ -9,6 +9,7 @@
 
 void checkCounter(states *specific );
 void updateStateIds(void);
+void checkFlags(states *specific);
 
 //These functions only execute processes and store the results in the relevant structures.
 extern void ledStateHandler(void);
@@ -48,6 +49,14 @@ void currentStateHandler(void){
     
     switch(state.device){                                                       //switch statement based on the the state that should now
         case wait:                                                              //be executed.
+            checkFlags(&state.bluetooth);
+            checkFlags(&state.incomingCommands);
+            checkFlags(&state.outgoingMessages);
+            checkFlags(&state.led);
+            checkFlags(&state.readKeyCable);
+            checkFlags(&state.readSupply);
+            checkFlags(&state.shaftTest);
+            checkFlags(&state.tag);
             break;
             
         case readKeyCableState :                                                
@@ -180,4 +189,16 @@ void updateStateIds(void){
     state.readSupply.id = readSupplyState;
     state.shaftTest.id = shaftTestState;
     state.tag.id = tagState;
+}
+
+void checkFlags(states *specific){
+    if(!specific->flag)
+        return;
+    unsigned char inQueue = 0;
+    for(int i = 0; i < queueLength; i++){
+        if(state.stateQueue[i] == specific->id)
+            inQueue = 1;
+    }
+    if(!inQueue)
+        specific->flag = 0;
 }
