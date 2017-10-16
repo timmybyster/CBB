@@ -165,3 +165,7 @@ unsigned char readMainsInterval(void){
     }
     return 0;
 }
+
+unsigned char readMainSleep(void){
+    return PORT_MainsDetect;
+}

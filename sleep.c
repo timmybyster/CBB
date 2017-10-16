@@ -81,7 +81,6 @@ void sleep12V(void){
 }
 
 void mainsSleep(void){
-    setOffLed();                                                               //turn the led OFF
     sleepBluetooth();                                                           //turn the Bluetooth OFF
     sleep12V();                                                                 //turn the 12V supply off
     _delay_ms(1000);
@@ -93,13 +92,23 @@ void mainsSleep(void){
     us100Enable = 0;                                                            //turn off the 100us Timer
     sec4Interrupt = 0;
     modemReceiveInterrupt = 0;
+    writeStructureToEeprom(ABB_1.det_arrays.UIDs,sizeof(detonator_UID)*(ABB_1.dets_length + 1));
+    writeStructureToEeprom(ABB_1.det_arrays.info,sizeof(detonator_data)*(ABB_1.dets_length + 1));
+    writeStructureToEeprom(&ABB_1.dets_length,1);
+    writeStructureToEeprom(&ABB_1.destination,2);
     modemSleep();
     ADCON0bits.ADON = 0;                                                        //turn off the ADC
     FVRCONbits.FVREN = 0;                                                       //turn off the FVR
     acOr36VInterruptEdge = 1;                                                   //Enable the interrupt on a positive edge now in anticipation of the return of 36V
-    CPUDOZEbits.IDLEN = 0;                                                      //ensure the device goes to sleep
-    ABB_1.deviceState = sleepDevice;                                            //set the device state to sleep
+    CPUDOZEbits.DOZE = 0b111;
+    CPUDOZEbits.IDLEN = 1;                                                      //ensure the device goes to sleep
     WDTCON0bits.SEN = 0;
+    setOffLed();                                                               //turn the led OFF
+    OSCCON1bits.NDIV = 0b0000;
+    OSCCON1bits.NOSC = 0b101;
+    OSCCON2bits.CDIV = 0b0000;
+    OSCCON2bits.COSC = 0b101;
+    SLEEP();
 }
 
 void mainsWake(void){

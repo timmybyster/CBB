@@ -36,7 +36,7 @@
 //Low Battery at 3,9V >> 1,60875V on ADC 804
 #define lowBatteryRead      804
 //Too Low Battery at 3,6V >> 1,485V on ADC 742
-#define lowBattery2Read     0         
+#define lowBattery2Read     742         
 //END OF READ SUPPLY RANGES
 
 //READ SUPPLY STATES

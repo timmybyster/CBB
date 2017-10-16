@@ -166,11 +166,10 @@ void device(void){
             break;
             
         case offDevice :
-            currentStateHandler();                                              //execute any background processes
             break;
             
         case turnOnDevice :
-            mainsWake();
+            RESET();
             break;
             
         case readyDevice:
@@ -276,7 +275,9 @@ void deviceStateHandler(void){
             break;
                 
         case keyIdleDevice :
-            if(!ABB_1.info.statusBits.voltage && !FLAGS.shaftComplete && !PORT_ACor36V)
+            if(ABB_1.info.statusBits.lowBat2)
+                ABB_1.deviceState = lowBat2Device;
+            else if(!ABB_1.info.statusBits.voltage && !FLAGS.shaftComplete && !PORT_ACor36V)
                 ABB_1.deviceState = shaftDevice;
             else if(FLAGS.shaftComplete){
                 if(ABB_1.info.statusBits.shaftFault)
@@ -323,8 +324,10 @@ void deviceStateHandler(void){
             break;
             
         case offDevice :                                                        
-            if(ABB_1.info.statusBits.mains)                                     //only leave the off state if mains is returned
-                ABB_1.deviceState = turnOnDevice;             
+            if(readMainSleep())                                             //only leave the off state if mains is returned
+                ABB_1.deviceState = turnOnDevice;
+            else
+                ABB_1.deviceState = offDevice;
             break;
             
         case turnOnDevice :
