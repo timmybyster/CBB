@@ -81,18 +81,6 @@ void addDataToOutgoingQueue (unsigned char *data, unsigned char command, int siz
      
 }
 
-//returns the window of a UID based on its index
-unsigned char getIndexByUID(unsigned char *UID){
-    int i = 0;                                                                  //initialise the index as 0    
-    while(ABB_1.det_arrays.UIDs[i].UID[0] != UID[0] ||                          //loop until the first index
-          ABB_1.det_arrays.UIDs[i].UID[1] != UID[1] ||                          //the second index
-          ABB_1.det_arrays.UIDs[i].UID[2] != UID[2] ||                          //the third index
-          ABB_1.det_arrays.UIDs[i].UID[3] != UID[3]  && i < 101);               //and the fourth index all match or i is greater than 100
-        i++;                                                                    //increment i
-    return i;                                                                   //return the index
-}
-
-
 void handleIncomingQueuePacket(void){
     unsigned char index = 0; 
     if(incomingQueue.queue_pointer >= incomingQueue.length)                     //determine which message should be sent
@@ -159,7 +147,7 @@ void addPacketToIncomingQueue(void){
         }
         incomingQueue.length++;
         incomingQueue.queue_pointer++;
-        if (incomingQueue.queue_pointer == queueLength - 1){                    //if the queue pointer exceeds the queue length
+        if (incomingQueue.queue_pointer == queueLength){                        //if the queue pointer exceeds the queue length
             incomingQueue.queue_pointer = 0;                                    //set it to 0
         }
     }

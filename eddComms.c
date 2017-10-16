@@ -75,16 +75,6 @@ void initialiseEDDPins(void){
     ANSEL_EDDRead = 1;                                                          //set it as analog for the ADC
 }
 
-//allows the fire pic to take control of the line
-void triStateTxIsHigh(void){
-    TRIS_TXisHIGH = 1;                                                          //tri state the pin
-}
-
-//takes control of the line
-void controlTxIsHigh(void){
-    TRIS_TXisHIGH = 0;                                                          //set the pin as an output
-}
-
 void EDD_Init_Comms(void){
     initialiseEddADC();                                                         //initialise the ADC
     

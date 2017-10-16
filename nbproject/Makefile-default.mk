@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c peripherals.c initialise.c ST7540.c crc16.c packetQueueHandler.c currentStateHandler.c readSupply.c tagRead.c led.c readKeyCable.c eddComms.c program.c outgoingMessages.c incomingCommands.c fire.c shaftTest.c sleep.c bluetooth.c acOr36V.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c peripherals.c initialise.c ST7540.c crc16.c packetQueueHandler.c currentStateHandler.c readSupply.c tagRead.c led.c readKeyCable.c eddComms.c program.c outgoingMessages.c incomingCommands.c fire.c shaftTest.c sleep.c bluetooth.c acOr36V.c tag.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/peripherals.p1 ${OBJECTDIR}/initialise.p1 ${OBJECTDIR}/ST7540.p1 ${OBJECTDIR}/crc16.p1 ${OBJECTDIR}/packetQueueHandler.p1 ${OBJECTDIR}/currentStateHandler.p1 ${OBJECTDIR}/readSupply.p1 ${OBJECTDIR}/tagRead.p1 ${OBJECTDIR}/led.p1 ${OBJECTDIR}/readKeyCable.p1 ${OBJECTDIR}/eddComms.p1 ${OBJECTDIR}/program.p1 ${OBJECTDIR}/outgoingMessages.p1 ${OBJECTDIR}/incomingCommands.p1 ${OBJECTDIR}/fire.p1 ${OBJECTDIR}/shaftTest.p1 ${OBJECTDIR}/sleep.p1 ${OBJECTDIR}/bluetooth.p1 ${OBJECTDIR}/acOr36V.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/peripherals.p1.d ${OBJECTDIR}/initialise.p1.d ${OBJECTDIR}/ST7540.p1.d ${OBJECTDIR}/crc16.p1.d ${OBJECTDIR}/packetQueueHandler.p1.d ${OBJECTDIR}/currentStateHandler.p1.d ${OBJECTDIR}/readSupply.p1.d ${OBJECTDIR}/tagRead.p1.d ${OBJECTDIR}/led.p1.d ${OBJECTDIR}/readKeyCable.p1.d ${OBJECTDIR}/eddComms.p1.d ${OBJECTDIR}/program.p1.d ${OBJECTDIR}/outgoingMessages.p1.d ${OBJECTDIR}/incomingCommands.p1.d ${OBJECTDIR}/fire.p1.d ${OBJECTDIR}/shaftTest.p1.d ${OBJECTDIR}/sleep.p1.d ${OBJECTDIR}/bluetooth.p1.d ${OBJECTDIR}/acOr36V.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/peripherals.p1 ${OBJECTDIR}/initialise.p1 ${OBJECTDIR}/ST7540.p1 ${OBJECTDIR}/crc16.p1 ${OBJECTDIR}/packetQueueHandler.p1 ${OBJECTDIR}/currentStateHandler.p1 ${OBJECTDIR}/readSupply.p1 ${OBJECTDIR}/tagRead.p1 ${OBJECTDIR}/led.p1 ${OBJECTDIR}/readKeyCable.p1 ${OBJECTDIR}/eddComms.p1 ${OBJECTDIR}/program.p1 ${OBJECTDIR}/outgoingMessages.p1 ${OBJECTDIR}/incomingCommands.p1 ${OBJECTDIR}/fire.p1 ${OBJECTDIR}/shaftTest.p1 ${OBJECTDIR}/sleep.p1 ${OBJECTDIR}/bluetooth.p1 ${OBJECTDIR}/acOr36V.p1 ${OBJECTDIR}/tag.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/peripherals.p1.d ${OBJECTDIR}/initialise.p1.d ${OBJECTDIR}/ST7540.p1.d ${OBJECTDIR}/crc16.p1.d ${OBJECTDIR}/packetQueueHandler.p1.d ${OBJECTDIR}/currentStateHandler.p1.d ${OBJECTDIR}/readSupply.p1.d ${OBJECTDIR}/tagRead.p1.d ${OBJECTDIR}/led.p1.d ${OBJECTDIR}/readKeyCable.p1.d ${OBJECTDIR}/eddComms.p1.d ${OBJECTDIR}/program.p1.d ${OBJECTDIR}/outgoingMessages.p1.d ${OBJECTDIR}/incomingCommands.p1.d ${OBJECTDIR}/fire.p1.d ${OBJECTDIR}/shaftTest.p1.d ${OBJECTDIR}/sleep.p1.d ${OBJECTDIR}/bluetooth.p1.d ${OBJECTDIR}/acOr36V.p1.d ${OBJECTDIR}/tag.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/peripherals.p1 ${OBJECTDIR}/initialise.p1 ${OBJECTDIR}/ST7540.p1 ${OBJECTDIR}/crc16.p1 ${OBJECTDIR}/packetQueueHandler.p1 ${OBJECTDIR}/currentStateHandler.p1 ${OBJECTDIR}/readSupply.p1 ${OBJECTDIR}/tagRead.p1 ${OBJECTDIR}/led.p1 ${OBJECTDIR}/readKeyCable.p1 ${OBJECTDIR}/eddComms.p1 ${OBJECTDIR}/program.p1 ${OBJECTDIR}/outgoingMessages.p1 ${OBJECTDIR}/incomingCommands.p1 ${OBJECTDIR}/fire.p1 ${OBJECTDIR}/shaftTest.p1 ${OBJECTDIR}/sleep.p1 ${OBJECTDIR}/bluetooth.p1 ${OBJECTDIR}/acOr36V.p1
+OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/peripherals.p1 ${OBJECTDIR}/initialise.p1 ${OBJECTDIR}/ST7540.p1 ${OBJECTDIR}/crc16.p1 ${OBJECTDIR}/packetQueueHandler.p1 ${OBJECTDIR}/currentStateHandler.p1 ${OBJECTDIR}/readSupply.p1 ${OBJECTDIR}/tagRead.p1 ${OBJECTDIR}/led.p1 ${OBJECTDIR}/readKeyCable.p1 ${OBJECTDIR}/eddComms.p1 ${OBJECTDIR}/program.p1 ${OBJECTDIR}/outgoingMessages.p1 ${OBJECTDIR}/incomingCommands.p1 ${OBJECTDIR}/fire.p1 ${OBJECTDIR}/shaftTest.p1 ${OBJECTDIR}/sleep.p1 ${OBJECTDIR}/bluetooth.p1 ${OBJECTDIR}/acOr36V.p1 ${OBJECTDIR}/tag.p1
 
 # Source Files
-SOURCEFILES=main.c peripherals.c initialise.c ST7540.c crc16.c packetQueueHandler.c currentStateHandler.c readSupply.c tagRead.c led.c readKeyCable.c eddComms.c program.c outgoingMessages.c incomingCommands.c fire.c shaftTest.c sleep.c bluetooth.c acOr36V.c
+SOURCEFILES=main.c peripherals.c initialise.c ST7540.c crc16.c packetQueueHandler.c currentStateHandler.c readSupply.c tagRead.c led.c readKeyCable.c eddComms.c program.c outgoingMessages.c incomingCommands.c fire.c shaftTest.c sleep.c bluetooth.c acOr36V.c tag.c
 
 
 CFLAGS=
@@ -253,6 +253,14 @@ ${OBJECTDIR}/acOr36V.p1: acOr36V.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/acOr36V.d ${OBJECTDIR}/acOr36V.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/acOr36V.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
+${OBJECTDIR}/tag.p1: tag.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/tag.p1.d 
+	@${RM} ${OBJECTDIR}/tag.p1 
+	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  -D__DEBUG=1 --debugger=pickit3  --double=24 --float=24 --emi=wordwrite --rom=default,-FC7C-FFFF --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=free -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-download,+config,+clib,-plib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/tag.p1  tag.c 
+	@-${MV} ${OBJECTDIR}/tag.d ${OBJECTDIR}/tag.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/tag.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
 else
 ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -413,6 +421,14 @@ ${OBJECTDIR}/acOr36V.p1: acOr36V.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=24 --float=24 --emi=wordwrite --rom=default,-FC7C-FFFF --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=free -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-download,+config,+clib,-plib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/acOr36V.p1  acOr36V.c 
 	@-${MV} ${OBJECTDIR}/acOr36V.d ${OBJECTDIR}/acOr36V.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/acOr36V.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/tag.p1: tag.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/tag.p1.d 
+	@${RM} ${OBJECTDIR}/tag.p1 
+	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=24 --float=24 --emi=wordwrite --rom=default,-FC7C-FFFF --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=free -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-download,+config,+clib,-plib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/tag.p1  tag.c 
+	@-${MV} ${OBJECTDIR}/tag.d ${OBJECTDIR}/tag.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/tag.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 endif
 

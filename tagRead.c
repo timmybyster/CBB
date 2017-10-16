@@ -654,9 +654,3 @@ void tagFor1(void){
     LAT_TAG_UIO = 0;                                                            //set the pin low
     _delay_ms(2);                                                               //wait a few ms for the tag to charge
 }
-
-//checks to see if the tag has been removed by reading the port after the weak
-// pull up is enabled
-unsigned char checkIfTagIsRemoved(void){                                        
-    return PORT_TAG_UIO;                                                        //if the port is high then the tag has been removed
-}

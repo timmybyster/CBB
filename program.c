@@ -6,6 +6,7 @@
  */
 
 #include "main.h"
+#include "bluetooth.h"
 
 void programInitialise(void);
 void programUIDs(void);
@@ -56,7 +57,6 @@ void program(void){
     addDataToOutgoingQueue(ABB_1.det_arrays.info, CMD_AB1_DATA, sizeof(detonator_data));//add the entire data memory to the outgoing queue to update changes on surface    
     initialiseStates();                                                         //re-initalise the background processes to restart the state Handler
     returnFromProgramming();                                                    //prepare for normal device operation
-    //activateBluetooth();                                                        //initialise the Bluetooth
 }
 
 void programInitialise(void){
@@ -67,23 +67,20 @@ void programInitialise(void){
 }                                                                               //clear the flag if we confirm that it is not
 
 void prepareForProgramming(void){
-    //sleepBluetooth();
     sec4Interrupt = 0;                                                          //disable the sleep interrupt
     sec4Enable = 0;                                                             //disable the sleep timer                                                   //turn on the 100us Delay Timer
     msInterrupt = 0;                                                            //Disable the State Handler 
     tagInterrupt = 0;                                                           //Disable the tagInterrupt
     uartReceiveInterrupt = 0;                                                   //Disable any Bluetooth Reception
+    uartRecieveEnable = 0;
     modemReceiveInterrupt = 0;                                                  //disable any incoming message Reception form the surface
     LAT_CableTest_Enable = 0;                                                   //disable 12V on the line
     LAT_24VCntrl = 1;                                                           //enable the 24V supply
-//    turnOn24V();                                                                //uncomment with new 24V supply mod
     us100Interrupt = 1;                                                         //enable the 100us interrupt
     us500Interrupt = 1;                                                         //enable the 500us interrupt
     us100DelayInterrupt = 1;                                                    //turn on the 100us Delay interrupt
     us100DelayEnable = 1;    
-    _delay_ms(500);                                                             //wait for the EDDs to charge up
     Set_Line_High();                                                            //and set the line high
-    _delay_ms(2000);
 }
 
 void returnFromProgramming(void){
@@ -152,19 +149,18 @@ void programUIDs(void){
     unsigned char attempts;
     if(ABB_1.dets_length > 0){                                                  //if at this point there are EDDs connected
         transmitBluetoothProgressPacket(0, 2);
-        EDD_Calibrate(); 
+        EDD_Calibrate();                                                        //calibrate them 
         if(FLAGS.programStop){
                 FLAGS.progSuccess = 0;
                 FLAGS.progComplete = 1;
                 return;
-        }//calibrate them
+        }
         for(int i = 1; i <= ABB_1.dets_length; i++){                            //loop through all of them again
             if(ABB_1.det_arrays.info[i].data.connection_status){                //Only bother checking UIDs that have been programmed successfully  
                 attempts = 0;
                 while(!selfCheckUID(i) && attempts++ < 2);                      //If the EDD is not in the correct state
                 if(attempts >= 2)
-                    //FLAGS.progSuccess = 0;                                    //Clear the program success Flag
-                    NOP();
+                    FLAGS.progSuccess = 0;                                      //Clear the program success Flag
             }
             if(FLAGS.programStop){
                 FLAGS.progSuccess = 0;

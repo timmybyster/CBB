@@ -187,7 +187,7 @@ unsigned short variance(unsigned short *values, unsigned char sampleSize){
 //checks the memory of EDDs for an exsiting UID
 unsigned char checkForExistingUID(unsigned long *receivedUID){
     unsigned long *currentUID;                                                  //create a pointer to for comparison
-    for(int i = 0; i < ABB_1.dets_length; i ++){                                //for every EDD
+    for(int i = 1; i < ABB_1.dets_length + 1; i ++){                                //for every EDD
         currentUID = ABB_1.det_arrays.UIDs[i].UID;                              //assign the value of the UID to the pointer
         if(*currentUID == *receivedUID || !*receivedUID)                        //compare the pointer with the received UID
             return 1;                                                           //if there is a match or the UID is completely 0 return success
@@ -197,7 +197,7 @@ unsigned char checkForExistingUID(unsigned long *receivedUID){
 
 unsigned char getTaggedUids(void){
     unsigned char count = 0;
-    for(int i = 1; i < ABB_1.dets_length; i ++){                                //for every EDD
+    for(int i = 1; i < ABB_1.dets_length + 1; i ++){                                //for every EDD
         if(ABB_1.det_arrays.info[i].data.tagged)
             count++;
     }
