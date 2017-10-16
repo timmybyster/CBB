@@ -50,8 +50,10 @@ extern void initialiseTimer1(void);
 void turnOffAcInterrupt(void);
 
 extern void setOffLed(void);
-extern void updateStatusBitsSolidBlue(void);
+extern void determineLedStatusBits(void);
 extern void disengageRelay(void);
+
+unsigned char readMainSleep(void);
 
 void interrupt isr(void){
     if(ABB_1.deviceState== fireDevice && !FLAGS.fireComplete){     
@@ -205,7 +207,7 @@ void device(void){
             break;
             
         case mainsDevice :
-            updateStatusBitsSolidBlue();
+            currentStateHandler();                                               //execute any background processes
             break;
             
         case programDevice :
@@ -297,18 +299,14 @@ void deviceStateHandler(void){
             break;
         
         case mainsDevice :
-            if(!outgoingQueue.length){
-                if(ABB_1.info.statusBits.mains)                                     //check to see whether mains has been detected
-                    ABB_1.deviceState = bluetoothKeyDevice;                         //if so then check to see whether the bluetooth should be activated
-                else{
-                    if(ABB_1.info.statusBits.lowBat)                                //no mains so check if low battery should be indicated
-                        ABB_1.deviceState = lowBatDevice;
-                    else
-                       ABB_1.deviceState = bluetoothKeyDevice;                      //otherwise check to see whether bluetooth should be activated 
-                }
+            if(ABB_1.info.statusBits.mains)                                     //check to see whether mains has been detected
+                ABB_1.deviceState = bluetoothKeyDevice;                         //if so then check to see whether the bluetooth should be activated
+            else{
+                if(ABB_1.info.statusBits.lowBat)                                //no mains so check if low battery should be indicated
+                    ABB_1.deviceState = lowBatDevice;
+                else
+                   ABB_1.deviceState = bluetoothKeyDevice;                      //otherwise check to see whether bluetooth should be activated 
             }
-            else
-                ABB_1.deviceState = mainsDevice;
             break;
                 
         case lowBatDevice :                                                     
@@ -434,6 +432,7 @@ void checkStatusBits(void){
     FLAGS.checkStatusBits = 0;
     status = &ABB_1.info.statusBits;                                            //create a pointer to the current status bits
     if(*status != previousStatus){                                              //compare the value of the current pointer to the previous value
+        determineLedStatusBits();
         addPacketToOutgoingQueue(0, CMD_AB1_DATA, 0, ABB_1.destination);        //if its changed add a data packet to the outgoing queue
         previousStatus = *status;                                               //assign the current pointer to the previousStatus value for the next comparison
     }

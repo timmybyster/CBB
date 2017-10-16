@@ -121,12 +121,8 @@ void ledStateHandler(void){
         }
         return;                                                                 //do not process any other conditions
     }
-    unsigned short *statusBitsPtr;
-    statusBitsPtr= &ABB_1.info.statusBits;
-    *statusBitsPtr &= 0x0FFF;            
     switch (ABB_1.ledDeviceState){                                              //switch based on the current state of the device
         case idleDevice :                                                       //green flash 1 second intervals
-            *statusBitsPtr |= greenSingleFlash << 12; 
             switch (state.led.current){         
                 case ledOff :
                     state.led.next = flashGreen;                                //the led was off so now flash green                                
@@ -141,7 +137,6 @@ void ledStateHandler(void){
             break;
             
         case readyDevice :                                                      //green flash 1 second intervals
-            *statusBitsPtr |= greenSingleFlash << 12;
             switch (state.led.current){
                 case ledOff :
                     state.led.next = flashGreen;                                //the led was off so now flash green
@@ -154,7 +149,6 @@ void ledStateHandler(void){
             }
             break;   
         case cableFaultDevice :                                                 //red flash 1 second intervals
-            *statusBitsPtr |= redSingleFlash << 12;
             switch (state.led.current){
                 case flashRed :                                     
                     state.led.next = ledOff;                                    //the led was red so turn off
@@ -200,7 +194,6 @@ void ledStateHandler(void){
             }
             
         case detErrorDevice :                                                   //red flash 1 second interval
-            *statusBitsPtr |= redSingleFlash << 12;
             switch (state.led.current){
                 case ledOff :
                     state.led.next = flashRed;                                  //the led was off so now flash red
@@ -214,7 +207,6 @@ void ledStateHandler(void){
             break;
             
         case successDevice :                                                    //blue flash 1 second intervals
-            *statusBitsPtr |= blueDoubleFlash << 12;
             switch (state.led.current){
                 case flashBlue :
                     state.led.next = offFlash;                                 //the led was off so now flash blue        
@@ -235,7 +227,6 @@ void ledStateHandler(void){
             break;
             
         case failDevice :                                                       //double flash red
-            *statusBitsPtr |= redDoubleFlash << 12;
             switch (state.led.current){
                 case flashRed :
                     state.led.next = offFlash;                                  //the device flashed red for the first time so flash off
@@ -296,22 +287,28 @@ void setOffLed(void){
     LAT_LED_GREEN = 0;                                                          //clear the Green led
 }
 
-void ledSleep(void){
-    TRIS_LED_RED = 1;
-    TRIS_LED_BLUE = 1;
-    TRIS_LED_GREEN = 1;
-}
-
-void updateStatusBitsSolidRed(void){
+void determineLedStatusBits(void){
     unsigned short *statusBitsPtr;
     statusBitsPtr = &ABB_1.info.statusBits;
     *statusBitsPtr &= 0x0FFF;
-    *statusBitsPtr |= redSolid << 12; 
-}
-
-void updateStatusBitsSolidBlue(void){
-    unsigned short *statusBitsPtr;
-    statusBitsPtr = &ABB_1.info.statusBits;
-    *statusBitsPtr &= 0x0FFF;
-    *statusBitsPtr |= blueSolid << 12; 
+    if(FLAGS.fireComplete){
+        if(FLAGS.fireSuccessFlag)
+            *statusBitsPtr |= blueSingleFlash << 12;
+        else
+            *statusBitsPtr |= redDoubleFlash << 12;
+        return;
+    }
+    if(ABB_1.info.statusBits.cable_fault || ABB_1.info.statusBits.detError){
+        *statusBitsPtr |= redSingleFlash << 12;
+        return;
+    }
+    if(ABB_1.info.statusBits.key_switch_status && !(ABB_1.info.statusBits.cable_fault || ABB_1.info.statusBits.ready)){
+        *statusBitsPtr |= blueSolid << 12;
+        return;
+    }
+    *statusBitsPtr |= greenSingleFlash << 12;
+    return;
+    
+                
+        
 }
