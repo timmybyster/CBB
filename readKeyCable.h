@@ -41,7 +41,7 @@
 //READ KEY CABLE ADC CONFIG
 
 //READ KEY CABLE RANGES
-#define cableFaultReadValue         0x05A
+#define cableFaultReadValue         0x046
 #define keyReadValue                0x010 
 #define testRepetitions             5     
 //END OF READ KEY CABLE RANGES

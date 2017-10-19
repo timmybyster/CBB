@@ -25,7 +25,7 @@
 #define tagClearValue           0x200
 
 #define testRepetitions         5
-#define ADCDelay                20
+#define ADCDelay                50
 #define allowedVariance         100
     
 #endif TAG_H
